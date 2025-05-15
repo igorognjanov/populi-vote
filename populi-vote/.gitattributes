@@ -1,0 +1,12 @@
+# Set default behavior to automatically normalize line endings.
+* text=auto
+
+# Declare text files
+*.txt text
+*.md text
+
+# Binary files (no need for Git to alter them)
+*.jpg binary
+*.png binary
+*.pdf binary
+

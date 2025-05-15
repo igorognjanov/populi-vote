@@ -1,0 +1,37 @@
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment files
+.env
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# Build directories
+build/
+dist/
+
+# Coverage
+coverage/
+
+# macOS
+*.dmg
+
+# Other common files
+*.bak
+*.tmp
+
