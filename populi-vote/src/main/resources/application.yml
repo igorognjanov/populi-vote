@@ -1,0 +1,12 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: populi-vote
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/populi_vote
