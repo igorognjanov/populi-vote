@@ -10,3 +10,22 @@ spring:
     username: postgres
     password: postgres
     url: jdbc:postgresql://localhost:5432/populi_vote
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/populi-vote
+      client:
+        registration:
+          populi-vote:
+            client-id: populi-vote
+            client-secret: YkqJMctNFNkYNajYTUGAFPqtPoFplRBw
+            scope:
+              - openid
+              - profile
+              - roles
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/populi-vote
+        provider:
+          populi-vote:
+            issuer-uri: http://localhost:8181/realms/populi-vote
