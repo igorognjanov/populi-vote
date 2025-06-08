@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { TestService } from '../../service/test.service';
+import { ElectionService } from '../../service/election.service';
 
 @Component({
   selector: 'home-page',
@@ -11,7 +11,7 @@ import { TestService } from '../../service/test.service';
 })
 export class HomePageComponent {
 
-  constructor(private testService: TestService) {
-    this.testService.getTest().subscribe((res) => console.log('IGOR', res))
+  constructor(private testService: ElectionService) {
+    this.testService.getElections().subscribe((res) => console.log('IGOR', res))
   }
 }

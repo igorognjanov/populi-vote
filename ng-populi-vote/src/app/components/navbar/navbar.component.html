@@ -1,9 +1,12 @@
-<nav class="navbar">
-  <div class="logo">Populi Vote</div>
-  <ul class="nav-links">
-    <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
-    <li><a routerLink="/results" routerLinkActive="active">Results</a></li>
-    <li><a routerLink="/about" routerLinkActive="active">About</a></li>
+<nav class='navbar'>
+  <div class='logo'>Populi Vote</div>
+  <ul class='nav-links'>
+    <li><a routerLink='/home' routerLinkActive='active'>Home</a></li>
+    <li><a routerLink='/results' routerLinkActive='active'>Results</a></li>
+    <li><a routerLink='/about' routerLinkActive='active'>About</a></li>
+    @if (keycloakService.hasAdminRealmRole()) {
+      <li><a routerLink='/elections' routerLinkActive='active'>Elections</a></li>
+    }
   </ul>
-  <button class="logout" (click)="logout()">Logout</button>
+  <button class='logout' (click)='logout()'>Logout</button>
 </nav>

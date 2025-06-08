@@ -13,7 +13,7 @@ import { KeycloakService } from '../../service/keycloak.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  constructor(private keycloakService: KeycloakService) {}
+  constructor(public keycloakService: KeycloakService) {}
 
   logout() {
     this.keycloakService.logout();

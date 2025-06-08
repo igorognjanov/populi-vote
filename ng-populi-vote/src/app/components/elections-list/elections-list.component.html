@@ -1,0 +1,33 @@
+<div class="election-list-container">
+  <h2>All Elections</h2>
+
+  <button class="create-button" routerLink="/elections/create">Create New Election</button>
+
+  <div *ngIf="elections.length === 0" class="empty">
+    No elections found.
+  </div>
+
+  <table *ngIf="elections.length > 0">
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let election of elections">
+      <td>{{ election.title }}</td>
+      <td>{{ election.description }}</td>
+      <td>{{ election.startDate | date: 'short' }}</td>
+      <td>{{ election.endDate | date: 'short' }}</td>
+      <td>
+        <button routerLink="/elections/edit/{{election.id}}">Edit</button>
+        <button (click)="deleteElection(election.id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

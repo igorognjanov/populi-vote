@@ -1,0 +1,51 @@
+<div class='election-form-container'>
+  <h2>{{ isEditMode ? 'Edit Election' : 'Create Election' }}</h2>
+
+  <form [formGroup]='form' (ngSubmit)='onSubmit()'>
+    <label for='title'>Title</label>
+    <input id='title' formControlName='title' type='text'/>
+
+    <label for='description'>Description</label>
+    <textarea id='description' formControlName='description'></textarea>
+
+    <label for='startDate'>Start Date</label>
+    <input id='startDate' formControlName='startDate' type='datetime-local'/>
+
+    <label for='endDate'>End Date</label>
+    <input id='endDate' formControlName='endDate' type='datetime-local'/>
+
+    <label for='type'>Election Type</label>
+    <select id='type' formControlName='type' name='type' required>
+      <option value='' disabled>Select an election type</option>
+      <option *ngFor='let type of electionTypes' [value]='type.id'>{{ type.label }}</option>
+    </select>
+
+
+    <div formArrayName='options'>
+      <div *ngFor='let option of options.controls; let i = index' [formGroupName]='i' class='option-group'>
+        <label>Option Name</label>
+        <input formControlName='name' type='text'/>
+
+        <div formArrayName='candidates' class='candidate-list'>
+          <div *ngFor="let candidate of candidates(option).controls; let j = index" [formGroupName]='j'>
+            <label>Candidate Full Name</label>
+            <input formControlName='fullName' type='text'/>
+            <label>Position (optional)</label>
+            <input formControlName='position' type='text'/>
+            <button type='button' (click)='removeCandidate(i, j)'>Remove Candidate</button>
+          </div>
+          <button type='button' (click)='addCandidate(i)'>Add Candidate</button>
+        </div>
+
+        <button type='button' (click)='removeOption(i)'>Remove Option</button>
+      </div>
+      <button type='button' (click)='addOption()'>Add Option</button>
+    </div>
+
+    <button type='submit' [disabled]='form.invalid'>
+      {{ isEditMode ? 'Update' : 'Create' }}
+    </button>
+
+
+  </form>
+</div>

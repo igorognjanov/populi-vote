@@ -29,6 +29,10 @@ export class KeycloakService {
     }
   }
 
+  hasAdminRealmRole(): boolean {
+    return this.keycloak.realmAccess.roles.includes('ADMIN');
+  }
+
   logout() {
     return this.keycloak.logout({redirectUri: 'http://localhost:4200'})
 
