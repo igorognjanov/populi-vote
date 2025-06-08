@@ -59,12 +59,16 @@ public class ElectionService {
                 ElectionType.values()[request.getType()]
             ));
 
-            optionRepository.saveAll(
-                request.getOptions().stream().map(it -> new Option(it.getTitle(), election)).collect(
-                    Collectors.toList()));
+            request.getOptions().forEach(optionDto -> {
+                var option = optionRepository.save(new Option(optionDto.getTitle(), election));
 
-            //candidateRepository.saveAll();
-            
+                candidateRepository.saveAll(optionDto.getCandidates()
+                    .stream()
+                    .map(candidateDto -> new Candidate(candidateDto.getName(), candidateDto.getPosition(), option,
+                        false))
+                    .collect(Collectors.toList()));
+            });
+
             return election;
 
         } else {
