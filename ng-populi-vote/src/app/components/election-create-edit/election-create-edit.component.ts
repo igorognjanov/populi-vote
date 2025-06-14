@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ElectionService } from '../../service/election.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OptionResponse } from '../../interface/option-response.interface';
@@ -12,11 +12,11 @@ import { OptionResponse } from '../../interface/option-response.interface';
   templateUrl: './election-create-edit.component.html',
   styleUrls: ['./election-create-edit.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage]
 })
 export class ElectionCreateEditComponent implements OnInit {
   form!: FormGroup;
-  isEditMode = false;
+  editable = true;
   electionId: number | null = null;
   electionTypes: OptionResponse[] = [];
 
@@ -43,7 +43,8 @@ export class ElectionCreateEditComponent implements OnInit {
     this.route.params.subscribe(params => {
       const id = params['id'];
       if (id) {
-        this.isEditMode = true;
+        this.editable = false;
+        this.form.disable();
         this.electionId = +id;
         this.form.get('id')?.setValue(this.electionId);
         this.electionService.findById(this.electionId).subscribe(election => {
@@ -53,7 +54,19 @@ export class ElectionCreateEditComponent implements OnInit {
             startDate: election.startDate,
             endDate: election.endDate,
             type: election.type
-            // todo
+          });
+          const optionsArray = this.form.get('options') as FormArray;
+
+          election.options.forEach(option => {
+            optionsArray.push(this.formBuilder.group({
+              title: [option.title],
+              candidates: this.formBuilder.array(
+                option.candidates.map(candidate => this.formBuilder.group({
+                  name: [candidate.name],
+                  position: [candidate.position]
+                }))
+              )
+            }));
           });
         });
       }
@@ -77,14 +90,14 @@ export class ElectionCreateEditComponent implements OnInit {
 
   createCandidate(): FormGroup {
     return this.formBuilder.group({
-      fullName: ['', Validators.required],
+      name: ['', Validators.required],
       position: [''] // Optional field
     });
   }
 
   createOption(): FormGroup {
     return this.formBuilder.group({
-      name: ['', Validators.required],
+      title: ['', Validators.required],
       candidates: this.formBuilder.array([this.createCandidate()]) // Start with 1 candidate
     });
   }
@@ -108,6 +121,6 @@ export class ElectionCreateEditComponent implements OnInit {
   }
 
   candidates(option: AbstractControl) {
-    return option.get('candidates') as FormArray
+    return option.get('candidates') as FormArray;
   }
 }

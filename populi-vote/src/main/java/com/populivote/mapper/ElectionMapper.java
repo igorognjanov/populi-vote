@@ -10,6 +10,7 @@ import com.populivote.domain.Election;
 import com.populivote.dto.ElectionDto;
 import com.populivote.service.ElectionService;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.*;
 import org.springframework.security.core.Authentication;
@@ -32,11 +33,11 @@ public class ElectionMapper {
     }
 
     public ElectionDto findById(Long id) {
-        return mapElectionToResponse(electionService.findById(id));
+        return mapElectionToResponseWithOptions(electionService.findById(id));
     }
 
     public ElectionDto createOrUpdate(ElectionDto request, Authentication connectedUser) {
-        return mapElectionToResponse(electionService.createOrUpdate(request));
+        return mapElectionToResponseWithOptions(electionService.createOrUpdate(request));
     }
 
     public void softDelete(Long id) {
@@ -51,6 +52,15 @@ public class ElectionMapper {
     }
 
     private ElectionDto mapElectionToResponse(Election election) {
+        return new ElectionDto(election.getId(), election.getTitle(), election.getDescription(),
+            election.getStartDate(),
+            election.getEndDate(),
+            election.getType().ordinal(),
+            null
+        );
+    }
+
+    private ElectionDto mapElectionToResponseWithOptions(Election election) {
         return new ElectionDto(election.getId(), election.getTitle(), election.getDescription(),
             election.getStartDate(),
             election.getEndDate(),

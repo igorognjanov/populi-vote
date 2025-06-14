@@ -1,6 +1,6 @@
 import { Candidate } from './candidate.interface';
 
-export interface OptionInterface {
-  name: string;
+export interface Option {
+  title: string;
   candidates: Candidate[];
 }

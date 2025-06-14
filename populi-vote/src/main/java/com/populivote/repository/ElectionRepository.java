@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ElectionRepository extends JpaRepository<Election, Long> {
 
-    public List<Election> findAllByDeleted(Boolean deleted);
+    public List<Election> findAllByDeletedOrderByCreatedDateDesc(Boolean deleted);
 }

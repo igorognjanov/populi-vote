@@ -37,12 +37,30 @@
     }
 
     input,
-    textarea {
+    textarea,
+    select {
       padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 1rem;
       width: 100%;
+      background-color: #ffffff;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    select {
+      appearance: none;
+      background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23336699" d="M2 0L0 2h4z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 0.65rem auto;
+      cursor: pointer;
+
+      &:focus {
+        border-color: #336699;
+        box-shadow: 0 0 0 2px rgba(51, 102, 153, 0.2);
+        outline: none;
+      }
     }
 
     textarea {
@@ -69,5 +87,52 @@
         cursor: not-allowed;
       }
     }
+  }
+
+  .action-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &.add {
+      background-color: #336699;
+      color: #fff;
+
+      &:hover {
+        background-color: #2a567e;
+      }
+    }
+
+    &.remove {
+      background-color: #e74c3c;
+      color: #fff;
+
+      &:hover {
+        background-color: #c0392b;
+      }
+    }
+
+    &.secondary {
+      background-color: #f1f1f1;
+      color: #333;
+      border: 1px solid #ccc;
+
+      &:hover {
+        background-color: #e0e0e0;
+      }
+    }
+  }
+
+  .button-right {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
   }
 }

@@ -29,7 +29,7 @@ public class ElectionService {
     //TODO: Add logs
 
     public List<Election> getElections() {
-        return electionRepository.findAllByDeleted(false);
+        return electionRepository.findAllByDeletedOrderByCreatedDateDesc(false);
     }
     public List<Option> getOptions(Election election) {
         return optionRepository.findAllByElection(election);

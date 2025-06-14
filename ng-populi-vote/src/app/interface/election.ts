@@ -1,4 +1,4 @@
-import { Option } from '@angular/cli/src/command-builder/utilities/json-schema';
+import { Option } from './option';
 
 export interface Election {
   id: number;

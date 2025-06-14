@@ -1,5 +1,5 @@
 <div class='election-form-container'>
-  <h2>{{ isEditMode ? 'Edit Election' : 'Create Election' }}</h2>
+  <h2>{{ editable ? 'Create Election' : 'Election Details' }}</h2>
 
   <form [formGroup]='form' (ngSubmit)='onSubmit()'>
     <label for='title'>Title</label>
@@ -15,7 +15,7 @@
     <input id='endDate' formControlName='endDate' type='datetime-local'/>
 
     <label for='type'>Election Type</label>
-    <select id='type' formControlName='type' name='type' required>
+    <select id='type' class='election-type-select' formControlName='type' name='type' required>
       <option value='' disabled>Select an election type</option>
       <option *ngFor='let type of electionTypes' [value]='type.id'>{{ type.label }}</option>
     </select>
@@ -23,29 +23,49 @@
 
     <div formArrayName='options'>
       <div *ngFor='let option of options.controls; let i = index' [formGroupName]='i' class='option-group'>
-        <label>Option Name</label>
-        <input formControlName='name' type='text'/>
+        <label>Option</label>
+        <input formControlName='title' type='text'/>
 
         <div formArrayName='candidates' class='candidate-list'>
-          <div *ngFor="let candidate of candidates(option).controls; let j = index" [formGroupName]='j'>
-            <label>Candidate Full Name</label>
-            <input formControlName='fullName' type='text'/>
+          <div *ngFor='let candidate of candidates(option).controls; let j = index' [formGroupName]='j'>
+            <label>Candidate Name</label>
+            <input formControlName='name' type='text'/>
             <label>Position (optional)</label>
-            <input formControlName='position' type='text'/>
-            <button type='button' (click)='removeCandidate(i, j)'>Remove Candidate</button>
+            <input formControlName='position' type='number'/>
+            @if (editable) {
+              <div class='button-right'>
+                <button type='button' class='action-button remove' (click)='removeCandidate(i, j)'>
+                  ✖ Remove Candidate
+                </button>
+              </div>
+            }
           </div>
-          <button type='button' (click)='addCandidate(i)'>Add Candidate</button>
+          @if (editable) {
+            <span (click)='addCandidate(i)'>
+              <img ngSrc='assets/icons/add.svg' alt='add' class='add-icon' width='30' height='30'/>
+            </span>
+          }
         </div>
 
-        <button type='button' (click)='removeOption(i)'>Remove Option</button>
+        @if (editable) {
+          <div class='button-right'>
+            <button type='button' class='action-button remove' (click)='removeOption(i)'>
+              ✖ Remove Option
+            </button>
+          </div>
+        }
       </div>
-      <button type='button' (click)='addOption()'>Add Option</button>
+      @if (editable) {
+        <button type='button' class='action-button add' (click)='addOption()'>
+          ➕ Add Option
+        </button>
+      }
     </div>
 
-    <button type='submit' [disabled]='form.invalid'>
-      {{ isEditMode ? 'Update' : 'Create' }}
-    </button>
-
-
+    @if (editable) {
+      <button type='submit' [disabled]='form.invalid'>
+        Create
+      </button>
+    }
   </form>
 </div>
