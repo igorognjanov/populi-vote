@@ -13,6 +13,6 @@ public class OptionResponse {
 
     private String label;
     private String key;
-    private Integer id;
+    private Long id;
 
 }

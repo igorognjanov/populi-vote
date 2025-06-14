@@ -1,9 +1,11 @@
 package com.populivote.mapper;
 
+import com.populivote.common.OptionResponse;
 import com.populivote.domain.ElectoralDistrict;
 import com.populivote.dto.ElectoralDistrictDto;
 import com.populivote.service.ElectoralDistrictService;
 import java.util.List;
+import java.util.stream.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,12 +17,15 @@ public class ElectoralDistrictMapper {
         this.electoralDistrictService = electoralDistrictService;
     }
 
-    public List<ElectoralDistrict> findAll() {
-        return electoralDistrictService.findAll();
+    public List<ElectoralDistrictDto> findAll() {
+        return electoralDistrictService.findAll()
+            .stream()
+            .map(this::mapElectoralDistrictToDto)
+            .collect(Collectors.toList());
     }
 
-    public ElectoralDistrict save(ElectoralDistrictDto dto) {
-        return electoralDistrictService.save(dto);
+    public ElectoralDistrictDto save(ElectoralDistrictDto dto) {
+        return mapElectoralDistrictToDto(electoralDistrictService.save(dto));
     }
 
     public ElectoralDistrictDto findById(Long id) {
@@ -34,5 +39,9 @@ public class ElectoralDistrictMapper {
     private ElectoralDistrictDto mapElectoralDistrictToDto(ElectoralDistrict electoralDistrict) {
         return new ElectoralDistrictDto(electoralDistrict.getId(), electoralDistrict.getName(),
             electoralDistrict.getCode(), electoralDistrict.getDescription());
+    }
+
+    public OptionResponse mapElectoralDistrictToOptionResponse(ElectoralDistrict electoralDistrict) {
+        return new OptionResponse(electoralDistrict.getName(), electoralDistrict.getCode(), electoralDistrict.getId());
     }
 }

@@ -46,9 +46,8 @@ public class ElectionMapper {
 
     public List<OptionResponse> getElectionTypes() {
         return Arrays.stream(ElectionType.values())
-            .map(it -> new OptionResponse(it.getLabel(), it.name(), it.ordinal()))
-            .collect(
-                Collectors.toList());
+            .map(it -> new OptionResponse(it.getLabel(), it.name(), (long) it.ordinal()))
+            .collect(Collectors.toList());
     }
 
     private ElectionDto mapElectionToResponse(Election election) {

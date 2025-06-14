@@ -23,11 +23,11 @@ public class ElectoralDistrictController {
     }
 
     @GetMapping
-    public List<ElectoralDistrict> findAll() {
+    public List<ElectoralDistrictDto> findAll() {
         return mapper.findAll();
     }
     @PostMapping
-    public ElectoralDistrict save(@RequestBody ElectoralDistrictDto dto) {
+    public ElectoralDistrictDto save(@RequestBody ElectoralDistrictDto dto) {
         return mapper.save(dto);
     }
 
