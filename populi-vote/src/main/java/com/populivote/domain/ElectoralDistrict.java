@@ -17,11 +17,15 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public final class ElectoralDistrict extends BaseEntity {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "code", unique = true)
+    private String code;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "deleted")
     private Boolean deleted;
-
 }

@@ -24,7 +24,7 @@
       <td>{{ election.startDate | date: 'short' }}</td>
       <td>{{ election.endDate | date: 'short' }}</td>
       <td>
-        <button routerLink="/elections/edit/{{election.id}}">Edit</button>
+        <button routerLink="/elections/{{election.id}}">Edit</button>
         <button (click)="deleteElection(election.id)">Delete</button>
       </td>
     </tr>

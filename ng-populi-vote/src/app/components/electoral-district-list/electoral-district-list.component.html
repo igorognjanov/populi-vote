@@ -1,0 +1,31 @@
+<div class="electoral-district-list-container">
+  <h2>All Electoral Districts</h2>
+
+  <button class="create-button" routerLink="/electoral-districts/create">Create New District</button>
+
+  <div *ngIf="districts.length === 0" class="empty">
+    No electoral districts found.
+  </div>
+
+  <table *ngIf="districts.length > 0">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let district of districts">
+      <td>{{ district.name }}</td>
+      <td>{{ district.code }}</td>
+      <td>{{ district.description }}</td>
+      <td>
+        <button routerLink="/electoral-districts/{{district.id}}">Edit</button>
+        <button (click)="deleteDistrict(district.id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

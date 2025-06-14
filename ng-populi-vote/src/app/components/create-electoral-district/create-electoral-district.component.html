@@ -1,0 +1,18 @@
+<div class='electoral-district-form-container'>
+  <h2>{{ editable ? 'Create Electoral District' : 'Electoral District Details' }}</h2>
+
+  <form [formGroup]='form' (ngSubmit)='onSubmit()'>
+    <label for='name'>Name</label>
+    <input id='name' formControlName='name' type='text'/>
+
+    <label for='code'>Code</label>
+    <input id='code' formControlName='code' type='text'/>
+
+    <label for='description'>Description</label>
+    <textarea id='description' formControlName='description'></textarea>
+
+    @if (editable) {
+      <button type='submit' [disabled]='form.invalid'>Create</button>
+    }
+  </form>
+</div>
