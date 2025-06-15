@@ -9,12 +9,12 @@ import { OptionResponse } from '../../interface/option-response.interface';
 
 @Component({
   selector: 'election-create-edit',
-  templateUrl: './election-create-edit.component.html',
-  styleUrls: ['./election-create-edit.component.scss'],
+  templateUrl: './election-create.component.html',
+  styleUrls: ['./election-create.component.scss'],
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage]
 })
-export class ElectionCreateEditComponent implements OnInit {
+export class ElectionCreateComponent implements OnInit {
   form!: FormGroup;
   editable = true;
   electionId: number | null = null;

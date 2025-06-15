@@ -28,4 +28,7 @@ public class PollingStation extends BaseEntity {
 
     @Column(name = "address")
     private String address;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
 }

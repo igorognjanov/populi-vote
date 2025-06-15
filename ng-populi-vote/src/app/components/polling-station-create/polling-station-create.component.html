@@ -1,0 +1,23 @@
+<div class='polling-station-form-container'>
+  <h2>{{ editable ? 'Create Polling Station' : 'Polling Station Details' }}</h2>
+
+  <form [formGroup]='form' (ngSubmit)='onSubmit()'>
+    <label for='name'>Name</label>
+    <input id='name' formControlName='name' type='text'/>
+
+    <label for='address'>Address</label>
+    <input id='address' formControlName='address' type='text'/>
+
+    <label for='municipalityId'>Municipality</label>
+    <select id='municipalityId' formControlName='municipalityId' required>
+      <option value='' disabled>Select a municipality</option>
+      <option *ngFor='let m of municipalities' [value]='m.id'>
+        {{ m.label }}
+      </option>
+    </select>
+
+    @if (editable) {
+      <button type='submit' [disabled]='form.invalid'>Create</button>
+    }
+  </form>
+</div>

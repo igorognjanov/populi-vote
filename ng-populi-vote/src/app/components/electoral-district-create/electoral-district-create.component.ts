@@ -8,8 +8,8 @@ import { CommonModule } from '@angular/common';
   selector: 'electoral-district-create',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './create-electoral-district.component.html',
-  styleUrls: ['./create-electoral-district.component.scss']
+  templateUrl: './electoral-district-create.component.html',
+  styleUrls: ['./electoral-district-create.component.scss']
 })
 export class ElectoralDistrictCreateComponent implements OnInit {
   form!: FormGroup;

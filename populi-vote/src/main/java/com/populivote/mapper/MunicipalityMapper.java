@@ -1,5 +1,6 @@
 package com.populivote.mapper;
 
+import com.populivote.common.OptionResponse;
 import com.populivote.domain.Municipality;
 import com.populivote.request.MunicipalityRequest;
 import com.populivote.response.MunicipalityResponse;
@@ -28,6 +29,13 @@ public class MunicipalityMapper {
         return municipalityService.findAll().stream().map(this::mapMunicipalityToResponse).collect(Collectors.toList());
     }
 
+    public List<OptionResponse> findAllAsOptions() {
+        return municipalityService.findAll()
+            .stream()
+            .map(this::mapMunicipalityToOptionResponse)
+            .collect(Collectors.toList());
+    }
+
     public MunicipalityResponse findById(Long id) {
         return mapMunicipalityToResponse(municipalityService.findById(id));
     }
@@ -37,7 +45,11 @@ public class MunicipalityMapper {
     }
 
     private MunicipalityResponse mapMunicipalityToResponse(Municipality municipality) {
-        return new MunicipalityResponse(municipality.getName(),
+        return new MunicipalityResponse(municipality.getId(), municipality.getName(),
             electoralDistrictMapper.mapElectoralDistrictToOptionResponse(municipality.getElectoralDistrict()));
+    }
+
+    public OptionResponse mapMunicipalityToOptionResponse(Municipality municipality) {
+        return new OptionResponse(municipality.getName(), null, municipality.getId());
     }
 }

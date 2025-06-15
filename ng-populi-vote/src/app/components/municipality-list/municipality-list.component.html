@@ -1,0 +1,29 @@
+<div class="municipality-list-container">
+  <h2>All Municipalities</h2>
+
+  <button class="create-button" routerLink="/municipalities/create">Create New Municipality</button>
+
+  <div *ngIf="municipalities.length === 0" class="empty">
+    No municipalities found.
+  </div>
+
+  <table *ngIf="municipalities.length > 0">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Electoral District</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let m of municipalities">
+      <td>{{ m.name }}</td>
+      <td>{{ m.electoralDistrict.label }}</td>
+      <td>
+        <button routerLink="/municipalities/{{m.id}}">Edit</button>
+        <button (click)="deleteMunicipality(m.id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

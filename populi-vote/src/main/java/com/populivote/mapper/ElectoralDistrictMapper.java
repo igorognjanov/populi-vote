@@ -24,6 +24,13 @@ public class ElectoralDistrictMapper {
             .collect(Collectors.toList());
     }
 
+    public List<OptionResponse> findAllAsOptions() {
+        return electoralDistrictService.findAll()
+            .stream()
+            .map(this::mapElectoralDistrictToOptionResponse)
+            .collect(Collectors.toList());
+    }
+
     public ElectoralDistrictDto save(ElectoralDistrictDto dto) {
         return mapElectoralDistrictToDto(electoralDistrictService.save(dto));
     }

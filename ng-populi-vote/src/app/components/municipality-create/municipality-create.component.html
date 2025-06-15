@@ -1,0 +1,19 @@
+<div class='municipality-form-container'>
+  <h2>{{ editable ? 'Create Municipality' : 'MunicipalityDetails' }}</h2>
+
+  <form [formGroup]='form' (ngSubmit)='onSubmit()'>
+    <label for='name'>Name</label>
+    <input id='name' formControlName='name' type='text'/>
+
+    <label for='electoralDistrict'>Electoral District</label>
+    <select id='electoralDistrict' formControlName='electoralDistrictId' required>
+      <option value='' disabled>Select a district</option>
+      <option *ngFor='let district of districts' [value]='district.id'>
+        {{ district.label }}
+      </option>
+    </select>
+    @if (editable) {
+      <button type='submit' [disabled]='form.invalid'>Create</button>
+    }
+  </form>
+</div>

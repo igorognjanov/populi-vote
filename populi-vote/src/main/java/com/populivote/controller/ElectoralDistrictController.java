@@ -1,5 +1,6 @@
 package com.populivote.controller;
 
+import com.populivote.common.OptionResponse;
 import com.populivote.domain.ElectoralDistrict;
 import com.populivote.dto.ElectoralDistrictDto;
 import com.populivote.mapper.ElectoralDistrictMapper;
@@ -25,6 +26,10 @@ public class ElectoralDistrictController {
     @GetMapping
     public List<ElectoralDistrictDto> findAll() {
         return mapper.findAll();
+    }
+    @GetMapping("/options")
+    public List<OptionResponse> findAllAsOptions() {
+        return mapper.findAllAsOptions();
     }
     @PostMapping
     public ElectoralDistrictDto save(@RequestBody ElectoralDistrictDto dto) {

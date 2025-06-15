@@ -1,5 +1,6 @@
 package com.populivote.controller;
 
+import com.populivote.common.OptionResponse;
 import com.populivote.request.MunicipalityRequest;
 import com.populivote.mapper.MunicipalityMapper;
 import com.populivote.response.MunicipalityResponse;
@@ -30,6 +31,11 @@ public class MunicipalityController {
     @GetMapping
     public List<MunicipalityResponse> findAll() {
         return this.mapper.findAll();
+    }
+
+    @GetMapping("/options")
+    public List<OptionResponse> findAllAsOptions() {
+        return this.mapper.findAllAsOptions();
     }
 
     @GetMapping("/{id}")

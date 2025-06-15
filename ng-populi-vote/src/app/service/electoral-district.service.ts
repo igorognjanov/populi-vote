@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ElectoralDistrict } from '../interface/electoral-district.interface';
+import { OptionResponse } from '../interface/option-response.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ElectoralDistrictService {
@@ -12,6 +13,10 @@ export class ElectoralDistrictService {
 
   findAll(): Observable<ElectoralDistrict[]> {
     return this.httpClient.get<ElectoralDistrict[]>(this.path);
+  }
+
+  findAllAsOptions(): Observable<OptionResponse[]> {
+    return this.httpClient.get<OptionResponse[]>(`${this.path}/options`);
   }
 
   create(request: ElectoralDistrict): Observable<ElectoralDistrict> {

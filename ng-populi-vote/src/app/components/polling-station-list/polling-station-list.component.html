@@ -1,0 +1,31 @@
+<div class="polling-station-list-container">
+  <h2>All Polling Stations</h2>
+
+  <button class="create-button" routerLink="/polling-stations/create">Create New Polling Station</button>
+
+  <div *ngIf="pollingStations.length === 0" class="empty">
+    No polling stations found.
+  </div>
+
+  <table *ngIf="pollingStations.length > 0">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Municipality</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ps of pollingStations">
+      <td>{{ ps.name }}</td>
+      <td>{{ ps.address }}</td>
+      <td>{{ ps.municipality.label }}</td>
+      <td>
+        <button routerLink="/polling-stations/{{ps.id}}">Edit</button>
+        <button (click)="deletePollingStation(ps.id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -8,8 +8,8 @@ import { Election } from '../../interface/election';
   selector: 'election-list',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './elections-list.component.html',
-  styleUrl: './elections-list.component.scss'
+  templateUrl: './election-list.component.html',
+  styleUrl: './election-list.component.scss'
 })
 export class ElectionListComponent implements OnInit {
   elections: Election[] = [];

@@ -7,6 +7,8 @@
     @if (keycloakService.hasAdminRealmRole()) {
       <li><a routerLink='/elections' routerLinkActive='active'>Elections</a></li>
       <li><a routerLink='/electoral-districts' routerLinkActive='active'>Electoral Districts</a></li>
+      <li><a routerLink='/municipalities' routerLinkActive='active'>Municipalities</a></li>
+      <li><a routerLink='/polling-stations' routerLinkActive='active'>Polling Stations</a></li>
     }
   </ul>
   <button class='logout' (click)='logout()'>Logout</button>
