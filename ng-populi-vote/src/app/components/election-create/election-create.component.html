@@ -2,68 +2,155 @@
   <h2>{{ editable ? 'Create Election' : 'Election Details' }}</h2>
 
   <form [formGroup]='form' (ngSubmit)='onSubmit()'>
-    <label for='title'>Title</label>
-    <input id='title' formControlName='title' type='text'/>
+    <!-- Title -->
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput formControlName='title'/>
+    </mat-form-field>
 
-    <label for='description'>Description</label>
-    <textarea id='description' formControlName='description'></textarea>
-
-    <label for='startDate'>Start Date</label>
-    <input id='startDate' formControlName='startDate' type='datetime-local'/>
-
-    <label for='endDate'>End Date</label>
-    <input id='endDate' formControlName='endDate' type='datetime-local'/>
-
-    <label for='type'>Election Type</label>
-    <select id='type' class='election-type-select' formControlName='type' name='type' required>
-      <option value='' disabled>Select an election type</option>
-      <option *ngFor='let type of electionTypes' [value]='type.id'>{{ type.label }}</option>
-    </select>
+    <!-- Description -->
+    <mat-form-field appearance='outline'>
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName='description'></textarea>
+    </mat-form-field>
 
 
+    <!-- Date Picker -->
+    <mat-form-field appearance='outline'>
+      <mat-label>Start Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="startDate" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Start Time</mat-label>
+      <input matInput [ngxMatTimepicker]="timePicker" formControlName="startTime" />
+      <ngx-mat-timepicker #timePicker></ngx-mat-timepicker>
+    </mat-form-field>
+
+    <!-- End Date -->
+    <mat-form-field appearance='outline'>
+      <mat-label>End Date</mat-label>
+      <input matInput type='datetime-local' formControlName='endDate'/>
+    </mat-form-field>
+
+    <!-- Election Type -->
+    <mat-form-field appearance='outline'>
+      <mat-label>Election Type</mat-label>
+      <mat-select formControlName='type' required>
+        <mat-option value='' disabled>Select an election type</mat-option>
+        <mat-option *ngFor='let type of electionTypes' [value]='type.id'>
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Municipalities -->
+    <mat-form-field appearance='outline'>
+      <mat-label>Municipalities</mat-label>
+      <mat-select formControlName='municipalityIds' multiple required>
+        <mat-option *ngFor='let municipality of municipalities' [value]='municipality.id'>
+          {{ municipality.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Electoral Districts -->
+    <mat-form-field appearance='outline'>
+      <mat-label>Electoral Districts</mat-label>
+      <mat-select formControlName='electoralDistrictIds' multiple required>
+        <mat-option *ngFor='let district of electoralDistricts' [value]='district.id'>
+          {{ district.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Options and Candidates -->
     <div formArrayName='options'>
-      <div *ngFor='let option of options.controls; let i = index' [formGroupName]='i' class='option-group'>
-        <label>Option</label>
-        <input formControlName='title' type='text'/>
+      <div
+        *ngFor='let option of options.controls; let i = index'
+        [formGroupName]='i'
+        class='option-group'
+      >
+        <!-- Option Title -->
+        <mat-form-field appearance='outline'>
+          <mat-label>Option Title</mat-label>
+          <input matInput formControlName='title'/>
+        </mat-form-field>
 
+        <!-- Candidates -->
         <div formArrayName='candidates' class='candidate-list'>
-          <div *ngFor='let candidate of candidates(option).controls; let j = index' [formGroupName]='j'>
-            <label>Candidate Name</label>
-            <input formControlName='name' type='text'/>
-            <label>Position (optional)</label>
-            <input formControlName='position' type='number'/>
+          <div
+            *ngFor='let candidate of candidates(option).controls; let j = index'
+            [formGroupName]='j'
+          >
+            <mat-form-field appearance='outline'>
+              <mat-label>Candidate Name</mat-label>
+              <input matInput formControlName='name'/>
+            </mat-form-field>
+
+            <mat-form-field appearance='outline'>
+              <mat-label>Position (optional)</mat-label>
+              <input matInput type='number' formControlName='position'/>
+            </mat-form-field>
+
             @if (editable) {
               <div class='button-right'>
-                <button type='button' class='action-button remove' (click)='removeCandidate(i, j)'>
+                <button
+                  mat-raised-button
+                  color='warn'
+                  type='button'
+                  (click)='removeCandidate(i, j)'
+                >
                   ✖ Remove Candidate
                 </button>
               </div>
             }
           </div>
+
           @if (editable) {
-            <span (click)='addCandidate(i)'>
-              <img ngSrc='assets/icons/add.svg' alt='add' class='add-icon' width='30' height='30'/>
-            </span>
+            <button
+              mat-mini-fab
+              color='primary'
+              type='button'
+              (click)='addCandidate(i)'
+              aria-label='Add Candidate'
+            >
+              <mat-icon>add</mat-icon>
+            </button>
           }
         </div>
 
         @if (editable) {
           <div class='button-right'>
-            <button type='button' class='action-button remove' (click)='removeOption(i)'>
+            <button
+              mat-raised-button
+              color='warn'
+              type='button'
+              (click)='removeOption(i)'
+            >
               ✖ Remove Option
             </button>
           </div>
         }
       </div>
+
       @if (editable) {
-        <button type='button' class='action-button add' (click)='addOption()'>
-          ➕ Add Option
+        <button
+          mat-raised-button
+          color='primary'
+          type='button'
+          (click)='addOption()'
+        >
+          <mat-icon>add</mat-icon>
+          Add Option
         </button>
       }
     </div>
 
     @if (editable) {
-      <button type='submit' [disabled]='form.invalid'>
+      <button mat-raised-button color='accent' type='submit' [disabled]='form.invalid'>
         Create
       </button>
     }

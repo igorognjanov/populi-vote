@@ -28,4 +28,8 @@ public class ElectionDto {
 
     private List<OptionDto> options;
 
+    private List<Long> municipalityIds;
+
+    private List<Long> electoralDistrictIds;
+
 }

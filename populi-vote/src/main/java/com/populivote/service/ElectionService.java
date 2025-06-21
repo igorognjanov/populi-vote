@@ -2,6 +2,8 @@ package com.populivote.service;
 
 import com.populivote.domain.Candidate;
 import com.populivote.domain.Election;
+import com.populivote.domain.ElectionElectoralDistrict;
+import com.populivote.domain.ElectionMunicipality;
 import com.populivote.domain.Option;
 import com.populivote.dto.ElectionDto;
 import com.populivote.enums.ElectionType;
@@ -18,12 +20,24 @@ public class ElectionService {
     private final ElectionRepository electionRepository;
     private final OptionRepository optionRepository;
     private final CandidateRepository candidateRepository;
+    private final MunicipalityService municipalityService;
+    private final ElectoralDistrictService electoralDistrictService;
+    private final ElectionMunicipalityService electionMunicipalityService;
+    private final ElectionElectoralDistrictService electionElectoralDistrictService;
 
     public ElectionService(ElectionRepository electionRepository, OptionRepository optionRepository,
-                           CandidateRepository candidateRepository) {
+                           CandidateRepository candidateRepository,
+                           MunicipalityService municipalityService,
+                           ElectionMunicipalityService electionMunicipalityService,
+                           ElectionElectoralDistrictService electionElectoralDistrictService,
+                           ElectoralDistrictService electoralDistrictService) {
         this.electionRepository = electionRepository;
         this.optionRepository = optionRepository;
         this.candidateRepository = candidateRepository;
+        this.municipalityService = municipalityService;
+        this.electoralDistrictService = electoralDistrictService;
+        this.electionMunicipalityService = electionMunicipalityService;
+        this.electionElectoralDistrictService = electionElectoralDistrictService;
     }
 
     //TODO: Add logs
@@ -68,6 +82,16 @@ public class ElectionService {
                         false))
                     .collect(Collectors.toList()));
             });
+
+            this.electionMunicipalityService.saveAll(request.getMunicipalityIds()
+                .stream()
+                .map(it -> new ElectionMunicipality(election, municipalityService.findById(it)))
+                .collect(Collectors.toList()));
+
+            this.electionElectoralDistrictService.saveAll(request.getElectoralDistrictIds()
+                .stream()
+                .map(it -> new ElectionElectoralDistrict(election, electoralDistrictService.findById(it))).collect(
+                    Collectors.toList()));
 
             return election;
 

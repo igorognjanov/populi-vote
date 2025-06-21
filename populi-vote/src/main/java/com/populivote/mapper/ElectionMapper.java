@@ -8,9 +8,10 @@ import com.populivote.enums.ElectionType;
 import com.populivote.common.OptionResponse;
 import com.populivote.domain.Election;
 import com.populivote.dto.ElectionDto;
+import com.populivote.service.ElectionElectoralDistrictService;
+import com.populivote.service.ElectionMunicipalityService;
 import com.populivote.service.ElectionService;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.*;
 import org.springframework.security.core.Authentication;
@@ -20,9 +21,15 @@ import org.springframework.stereotype.Service;
 public class ElectionMapper {
 
     private final ElectionService electionService;
+    private final ElectionMunicipalityService electionMunicipalityService;
+    private final ElectionElectoralDistrictService electionElectoralDistrictService;
 
-    public ElectionMapper(ElectionService electionService) {
+    public ElectionMapper(ElectionService electionService,
+                          ElectionMunicipalityService electionMunicipalityService,
+                          ElectionElectoralDistrictService electionElectoralDistrictService) {
         this.electionService = electionService;
+        this.electionMunicipalityService = electionMunicipalityService;
+        this.electionElectoralDistrictService = electionElectoralDistrictService;
     }
 
     public List<ElectionDto> getElections() {
@@ -55,7 +62,9 @@ public class ElectionMapper {
             election.getStartDate(),
             election.getEndDate(),
             election.getType().ordinal(),
-            null
+            null,
+            electionMunicipalityService.findMunicipalityIdsByElection(election),
+            electionElectoralDistrictService.findElectoralDistrictIdsByElection(election)
         );
     }
 
@@ -65,7 +74,9 @@ public class ElectionMapper {
             election.getEndDate(),
             election.getType().ordinal(),
             electionService.getOptions(election)
-                .stream().map(this::mapOptionToOptionDto).collect(Collectors.toList())
+                .stream().map(this::mapOptionToOptionDto).collect(Collectors.toList()),
+            electionMunicipalityService.findMunicipalityIdsByElection(election),
+            electionElectoralDistrictService.findElectoralDistrictIdsByElection(election)
         );
     }
 
