@@ -5,13 +5,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ElectoralDistrictService } from '../../service/electoral-district.service';
 import { CommonModule } from '@angular/common';
 import { OptionResponse } from '../../interface/option-response.interface';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'municipality-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './municipality-create.component.html',
-  styleUrls: ['./municipality-create.component.scss']
+  styleUrls: ['./municipality-create.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule
+  ]
 })
 export class MunicipalityCreateComponent implements OnInit {
   form!: FormGroup;
@@ -36,7 +47,6 @@ export class MunicipalityCreateComponent implements OnInit {
       next: res => this.districts = res,
       error: err => console.error('Failed to load districts', err)
     });
-
 
     this.route.params.subscribe(params => {
       const id = params['id'];

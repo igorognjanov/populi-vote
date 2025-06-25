@@ -10,6 +10,7 @@ import {
 } from './components/electoral-district-create/electoral-district-create.component';
 import { PollingStationListComponent } from './components/polling-station-list/polling-station-list.component';
 import { PollingStationCreateComponent } from './components/polling-station-create/polling-station-create.component';
+import { VotingComponent } from './components/vote/vote.component';
 
 export const routes: Routes = [
   {
@@ -33,5 +34,6 @@ export const routes: Routes = [
   { path: 'municipalities/:id', component: MunicipalityCreateComponent },
   { path: 'polling-stations', component: PollingStationListComponent },
   { path: 'polling-stations/create', component: PollingStationCreateComponent },
-  { path: 'polling-stations/:id', component: PollingStationCreateComponent }
+  { path: 'polling-stations/:id', component: PollingStationCreateComponent },
+  { path: 'vote/:id', component: VotingComponent }
 ];

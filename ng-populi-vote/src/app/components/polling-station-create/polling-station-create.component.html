@@ -2,22 +2,35 @@
   <h2>{{ editable ? 'Create Polling Station' : 'Polling Station Details' }}</h2>
 
   <form [formGroup]='form' (ngSubmit)='onSubmit()'>
-    <label for='name'>Name</label>
-    <input id='name' formControlName='name' type='text'/>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName='name'/>
+    </mat-form-field>
 
-    <label for='address'>Address</label>
-    <input id='address' formControlName='address' type='text'/>
+    <mat-form-field>
+      <mat-label>Code</mat-label>
+      <input matInput formControlName='code'/>
+    </mat-form-field>
 
-    <label for='municipalityId'>Municipality</label>
-    <select id='municipalityId' formControlName='municipalityId' required>
-      <option value='' disabled>Select a municipality</option>
-      <option *ngFor='let m of municipalities' [value]='m.id'>
-        {{ m.label }}
-      </option>
-    </select>
+    <mat-form-field>
+      <mat-label>Address</mat-label>
+      <input matInput formControlName='address'/>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Municipality</mat-label>
+      <mat-select formControlName='municipalityId' required>
+        <mat-option value='' disabled>Select a municipality</mat-option>
+        <mat-option *ngFor='let m of municipalities' [value]='m.id'>
+          {{ m.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
     @if (editable) {
-      <button type='submit' [disabled]='form.invalid'>Create</button>
+      <button mat-raised-button color='primary' type='submit' [disabled]='form.invalid'>
+        Create
+      </button>
     }
   </form>
 </div>

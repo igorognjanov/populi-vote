@@ -40,7 +40,7 @@ public class PollingStationMapper {
     }
 
     private PollingStationResponse mapPollingStationToResponse(PollingStation pollingStation) {
-        return new PollingStationResponse(pollingStation.getId(), pollingStation.getName(),
+        return new PollingStationResponse(pollingStation.getId(), pollingStation.getCode(), pollingStation.getName(),
             municipalityMapper.mapMunicipalityToOptionResponse(pollingStation.getMunicipality()),
             pollingStation.getAddress());
     }

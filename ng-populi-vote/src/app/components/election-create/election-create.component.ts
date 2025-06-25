@@ -17,8 +17,7 @@ import {
   MatDatepicker, MatDatepickerInput, MatDatepickerToggle
 } from '@angular/material/datepicker';
 import { MatNativeDateModule, MatRipple } from '@angular/material/core';
-import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
-
+import { ElectionType } from '../../enum/election-type.enum';
 
 @Component({
   selector: 'election-create-edit',
@@ -29,7 +28,7 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
             MatIconModule, MatButtonModule, MatInput, MatNativeDateModule, MatRipple,
             MatDatepickerToggle, MatDatepicker, MatDatepickerInput,
             MatFormFieldModule,
-            MatInputModule, NgxMatTimepickerModule]
+            MatInputModule]
 })
 export class ElectionCreateComponent implements OnInit {
   form!: FormGroup;
@@ -38,6 +37,10 @@ export class ElectionCreateComponent implements OnInit {
   electionTypes: OptionResponse[] = [];
   electoralDistricts: OptionResponse[] = [];
   municipalities: OptionResponse[] = [];
+  showMunicipalities = false;
+  showElectoralDistricts = false;
+  canAddAndRemoveCandidates = false;
+  canAddOption = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,6 +59,7 @@ export class ElectionCreateComponent implements OnInit {
       startDate: ['', Validators.required],
       startTime: ['', Validators.required],
       endDate: ['', Validators.required],
+      endTime: ['', Validators.required],
       type: [null, Validators.required],
       options: this.formBuilder.array([]),
       municipalityIds: [[], Validators.required],
@@ -72,6 +76,7 @@ export class ElectionCreateComponent implements OnInit {
       if (id) {
         this.editable = false;
         this.form.disable();
+        (this.form.get('options') as FormArray);
         this.electionId = +id;
         this.form.get('id')?.setValue(this.electionId);
         this.electionService.findById(this.electionId).subscribe(election => {
@@ -80,24 +85,101 @@ export class ElectionCreateComponent implements OnInit {
             description: election.description,
             startDate: election.startDate,
             endDate: election.endDate,
-            type: election.type
+            type: election.type,
+            electoralDistrictIds: election.electoralDistrictIds,
+            municipalityIds: election.municipalityIds
           });
           const optionsArray = this.form.get('options') as FormArray;
 
           election.options.forEach(option => {
-            optionsArray.push(this.formBuilder.group({
+            const form = this.formBuilder.group({
               title: [option.title],
               candidates: this.formBuilder.array(
-                option.candidates.map(candidate => this.formBuilder.group({
-                  name: [candidate.name],
-                  position: [candidate.position]
-                }))
+                option.candidates.map(candidate => {
+
+                  const form = this.formBuilder.group({
+                    name: [candidate.name],
+                    position: [candidate.position]
+                  });
+                  if (!this.editable) {
+                    form.disable();
+                  }
+                  return form;
+                })
               )
-            }));
+            });
+            if (!this.editable) {
+              form.disable();
+            }
+            optionsArray.push(form);
           });
         });
       }
     });
+
+    const startDateControl = this.form.get('startDate');
+    const endDateControl = this.form.get('endDate');
+    console.log(this.form.get('startTime'));
+    this.form.get('startTime')?.valueChanges.subscribe(time => {
+      const startDate = startDateControl?.value;
+      if (startDate != null) {
+        startDateControl?.setValue(this.setTimeOnDate(startDate, time));
+      }
+    });
+    this.form.get('endTime')?.valueChanges.subscribe(time => {
+      const endDate = endDateControl?.value;
+      if (endDate != null) {
+        endDateControl?.setValue(this.setTimeOnDate(endDate, time));
+      }
+    });
+
+    this.form.get('type')?.valueChanges.subscribe(type => {
+      this.canAddOption = true;
+      this.form.get('electoralDistrictIds')?.setValue([]);
+      this.form.setControl('options', new FormArray([]));
+      switch (type) {
+        case ElectionType.MAYORAL:
+        case ElectionType.REFERENDUM:
+        case ElectionType.PRESIDENTIAL: {
+          this.showMunicipalities = true;
+          this.showElectoralDistricts = false;
+          this.canAddAndRemoveCandidates = false;
+          break;
+        }
+        case ElectionType.PARLIAMENTARY: {
+          this.showMunicipalities = false;
+          this.showElectoralDistricts = true;
+          this.canAddAndRemoveCandidates = true;
+        }
+      }
+      if (type == ElectionType.REFERENDUM) {
+        this.options.controls.forEach(group => {
+          const candidates = (group as FormGroup).get('candidates') as FormArray;
+          candidates.controls.forEach(candidateGroup => {
+            const control = candidateGroup.get('name');
+            control?.clearValidators();
+            control?.updateValueAndValidity();
+          });
+        });
+      } else {
+        this.options.controls.forEach(group => {
+          const candidates = (group as FormGroup).get('candidates') as FormArray;
+          candidates.controls.forEach(candidateGroup => {
+            const control = candidateGroup.get('name');
+            control?.setValidators([Validators.required]);
+            control?.updateValueAndValidity();
+          });
+        });
+      }
+
+      if (this.editable) {
+        this.addOption();
+      }
+    });
+
+    // this.form.valueChanges.subscribe(form => {
+    //   this.logInvalidControls(this.form);
+    // })
   }
 
   onSubmit(): void {
@@ -117,7 +199,7 @@ export class ElectionCreateComponent implements OnInit {
 
   createCandidate(): FormGroup {
     return this.formBuilder.group({
-      name: ['', Validators.required],
+      name: [''],
       position: [''] // Optional field
     });
   }
@@ -150,4 +232,23 @@ export class ElectionCreateComponent implements OnInit {
   candidates(option: AbstractControl) {
     return option.get('candidates') as FormArray;
   }
+
+  private setTimeOnDate(date: Date, timeString: string): Date {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    const updatedDate = new Date(date);
+    updatedDate.setHours(hours, minutes, 0, 0); // sets hrs, mins, secs, ms
+    return updatedDate;
+  }
+
+  // logInvalidControls(formGroup: FormGroup | FormArray, path: string = ''): void {
+  //   Object.entries(formGroup.controls).forEach(([key, control]) => {
+  //     const currentPath = path ? `${path}.${key}` : key;
+  //
+  //     if (control instanceof FormGroup || control instanceof FormArray) {
+  //       this.logInvalidControls(control, currentPath);
+  //     } else if (control.invalid) {
+  //       console.warn(`Invalid control: ${currentPath}`, control.errors);
+  //     }
+  //   });
+  // }
 }

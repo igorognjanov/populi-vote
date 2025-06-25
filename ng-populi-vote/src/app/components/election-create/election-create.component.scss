@@ -7,9 +7,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
   h2 {
+    color: #336699;
+    margin-bottom: 1.5rem;
     text-align: center;
-    margin-bottom: 2rem;
-    font-size: 1.2rem;
   }
 
   form {
@@ -55,4 +55,12 @@
       font-size: 20px;
     }
   }
+}
+
+::ng-deep input[disabled],
+::ng-deep textarea[disabled],
+::ng-deep select[disabled] {
+  color: #333 !important; // make text darker
+  background-color: #f9f9f9 !important; // subtle light background
+  border-color: #ccc;
 }

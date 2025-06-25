@@ -11,6 +11,8 @@ public class PollingStationRequest {
 
     private String name;
 
+    private String code;
+
     private Long municipalityId;
 
     private String address;

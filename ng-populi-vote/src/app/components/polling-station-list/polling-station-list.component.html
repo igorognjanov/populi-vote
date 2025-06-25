@@ -1,31 +1,53 @@
-<div class="polling-station-list-container">
+<mat-card class='polling-station-list-container'>
   <h2>All Polling Stations</h2>
 
-  <button class="create-button" routerLink="/polling-stations/create">Create New Polling Station</button>
+  <div class='header-actions'>
+    <button mat-flat-button color='primary' routerLink='/polling-stations/create'>
+      <mat-icon>add</mat-icon>
+      Create New Polling Station
+    </button>
+  </div>
 
-  <div *ngIf="pollingStations.length === 0" class="empty">
+  <div *ngIf='pollingStations.length === 0' class='empty'>
     No polling stations found.
   </div>
 
-  <table *ngIf="pollingStations.length > 0">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Address</th>
-      <th>Municipality</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let ps of pollingStations">
-      <td>{{ ps.name }}</td>
-      <td>{{ ps.address }}</td>
-      <td>{{ ps.municipality.label }}</td>
-      <td>
-        <button routerLink="/polling-stations/{{ps.id}}">Edit</button>
-        <button (click)="deletePollingStation(ps.id)">Delete</button>
+  <table mat-table [dataSource]='pollingStations' class='mat-elevation-z1' *ngIf='pollingStations.length > 0'>
+    <ng-container matColumnDef='name'>
+      <th mat-header-cell *matHeaderCellDef> Name</th>
+      <td mat-cell *matCellDef='let ps'>
+        <a [routerLink]="['/polling-stations', ps.id]" class='link-name'>
+          {{ ps.name }}
+        </a>
       </td>
-    </tr>
-    </tbody>
+    </ng-container>
+
+    <ng-container matColumnDef='address'>
+      <th mat-header-cell *matHeaderCellDef> Address</th>
+      <td mat-cell *matCellDef='let ps'> {{ ps.code }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef='address'>
+      <th mat-header-cell *matHeaderCellDef> Address</th>
+      <td mat-cell *matCellDef='let ps'> {{ ps.address }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef='municipality'>
+      <th mat-header-cell *matHeaderCellDef> Municipality</th>
+      <td mat-cell *matCellDef='let ps'> {{ ps.municipality.label }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef='actions'>
+      <th mat-header-cell *matHeaderCellDef> Actions</th>
+      <td mat-cell *matCellDef='let ps'>
+        <button mat-button color='warn' (click)='deletePollingStation(ps.id)'>
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+    <tr mat-row *matRowDef='let row; columns: displayedColumns'></tr>
   </table>
-</div>
+</mat-card>

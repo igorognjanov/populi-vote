@@ -28,6 +28,11 @@ public class ElectionController {
         return electionMapper.getElections();
     }
 
+    @GetMapping("/ongoing")
+    public List<ElectionDto> getOngoingElections() {
+        return electionMapper.getOngoingElections();
+    }
+
     @GetMapping("/{id}")
     public ElectionDto findById(@PathVariable Long id) {
         return electionMapper.findById(id);

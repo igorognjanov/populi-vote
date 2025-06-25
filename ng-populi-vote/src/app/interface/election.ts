@@ -8,4 +8,6 @@ export interface Election {
   endDate: Date;
   type: number;
   options: Option[];
+  electoralDistrictIds: number[];
+  municipalityIds: number[];
 }

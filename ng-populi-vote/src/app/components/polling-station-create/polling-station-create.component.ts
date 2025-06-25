@@ -6,12 +6,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { OptionResponse } from '../../interface/option-response.interface';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'polling-station-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './polling-station-create.component.html',
-  styleUrls: ['./polling-station-create.component.scss']
+  styleUrls: ['./polling-station-create.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule
+  ]
 })
 export class PollingStationCreateComponent implements OnInit {
   form!: FormGroup;
@@ -29,6 +41,7 @@ export class PollingStationCreateComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
+      code: ['', Validators.required],
       address: ['', Validators.required],
       municipalityId: [null, Validators.required]
     });
@@ -48,6 +61,7 @@ export class PollingStationCreateComponent implements OnInit {
           this.municipalities = [pollingStation.municipality];
           this.form.patchValue({
             name: pollingStation.name,
+            code: pollingStation.code,
             address: pollingStation.address,
             municipalityId: pollingStation.municipality.id
           });
@@ -57,9 +71,7 @@ export class PollingStationCreateComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) return;
 
     this.pollingStationService.create(this.form.value).subscribe(() => {
       this.router.navigate(['/polling-stations']);

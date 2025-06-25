@@ -1,33 +1,52 @@
-<div class="election-list-container">
+<mat-card class="election-list-container">
   <h2>All Elections</h2>
 
-  <button class="create-button" routerLink="/elections/create">Create New Election</button>
+  <div class="header-actions">
+    <button mat-flat-button color="primary" routerLink="/elections/create">
+      <mat-icon>add</mat-icon> Create New Election
+    </button>
+  </div>
 
   <div *ngIf="elections.length === 0" class="empty">
     No elections found.
   </div>
 
-  <table *ngIf="elections.length > 0">
-    <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Start Date</th>
-      <th>End Date</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let election of elections">
-      <td>{{ election.title }}</td>
-      <td>{{ election.description }}</td>
-      <td>{{ election.startDate | date: 'short' }}</td>
-      <td>{{ election.endDate | date: 'short' }}</td>
-      <td>
-        <button routerLink="/elections/{{election.id}}">Edit</button>
-        <button (click)="deleteElection(election.id)">Delete</button>
+  <table mat-table [dataSource]="elections" class="mat-elevation-z1" *ngIf="elections.length > 0">
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let election">
+        <a [routerLink]="['/elections', election.id]" class="link-title">
+          {{ election.title }}
+        </a>
       </td>
-    </tr>
-    </tbody>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let election"> {{ election.description }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef> Start Date </th>
+      <td mat-cell *matCellDef="let election"> {{ election.startDate | date:'short' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef> End Date </th>
+      <td mat-cell *matCellDef="let election"> {{ election.endDate | date:'short' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let election">
+        <button mat-button color="warn" (click)="deleteElection(election.id)">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-</div>
+</mat-card>

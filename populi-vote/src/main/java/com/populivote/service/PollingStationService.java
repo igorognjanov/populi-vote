@@ -24,7 +24,7 @@ public class PollingStationService {
 
     public PollingStation save(PollingStationRequest request) {
         return this.pollingStationRepository.save(
-            new PollingStation(request.getName(), municipalityService.findById(request.getMunicipalityId()),
+            new PollingStation(request.getName(), request.getCode(), municipalityService.findById(request.getMunicipalityId()),
                 request.getAddress(), false));
     }
 
@@ -34,6 +34,10 @@ public class PollingStationService {
 
     public PollingStation findById(Long id) {
         return pollingStationRepository.findById(id).orElseThrow();
+    }
+
+    public PollingStation fundByCode(String code) {
+        return pollingStationRepository.findByCode(code);
     }
 
     public PollingStation delete(Long id) {

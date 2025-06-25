@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PollingStationRepository extends JpaRepository<PollingStation, Long> {
     List<PollingStation> findAllByDeletedOrderByCreatedDateDesc(Boolean deleted);
+
+    PollingStation findByCode(String code);
 }

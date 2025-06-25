@@ -1,0 +1,44 @@
+<div class='voting-container'>
+  @if (!submitted) {
+    <form [formGroup]='votingForm' (ngSubmit)='onSubmit()'>
+      <h2>🗳️ Vote Now</h2>
+
+      <mat-radio-group formControlName='selectedOption' class='options'>
+        <mat-label>Select your choice</mat-label>
+
+        @for (option of election?.options; track option) {
+          <mat-radio-button [value]='option.id'>
+            <h3 style='margin-bottom: 4px;'>{{ option.title }}</h3>
+            @for (candidate of option.candidates; track candidate) {
+              <h4> @if (option.candidates.length > 1) {
+                {{ candidate.position }}.
+              }
+                {{ candidate.name }}
+              </h4>
+            }
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+
+      @if (votingForm.get('selectedOption')?.invalid && votingForm.get('selectedOption')?.touched) {
+        <mat-error>
+          Please select an option to vote
+        </mat-error>
+      }
+
+      <button
+        mat-raised-button
+        color='primary'
+        type='submit'
+        class='submit-button'
+        [disabled]='votingForm.invalid'
+      > Submit Vote
+      </button>
+    </form>
+  } @else {
+    <div class='thank-you'>
+      <h2>🎉 Thank you!</h2>
+      <p>Your vote has been recorded.</p>
+    </div>
+  }
+</div>

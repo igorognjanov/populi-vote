@@ -1,18 +1,26 @@
-<div class='electoral-district-form-container'>
+<div class="electoral-district-form-container">
   <h2>{{ editable ? 'Create Electoral District' : 'Electoral District Details' }}</h2>
 
-  <form [formGroup]='form' (ngSubmit)='onSubmit()'>
-    <label for='name'>Name</label>
-    <input id='name' formControlName='name' type='text'/>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
 
-    <label for='code'>Code</label>
-    <input id='code' formControlName='code' type='text'/>
+    <mat-form-field>
+      <mat-label>Code</mat-label>
+      <input matInput formControlName="code" />
+    </mat-form-field>
 
-    <label for='description'>Description</label>
-    <textarea id='description' formControlName='description'></textarea>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
 
     @if (editable) {
-      <button type='submit' [disabled]='form.invalid'>Create</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Create
+      </button>
     }
   </form>
 </div>

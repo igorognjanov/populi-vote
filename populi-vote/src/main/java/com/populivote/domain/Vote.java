@@ -2,6 +2,7 @@ package com.populivote.domain;
 
 import com.populivote.common.BaseEntity;
 import com.populivote.common.OptionResponse;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -26,4 +27,7 @@ public final class Vote extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "polling_station_id")
     private PollingStation pollingStation;
+
+    @Column(name = "voter")
+    private String voter;
 }

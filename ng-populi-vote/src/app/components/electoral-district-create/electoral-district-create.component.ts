@@ -1,15 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ElectoralDistrictService } from '../../service/electoral-district.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'electoral-district-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './electoral-district-create.component.html',
-  styleUrls: ['./electoral-district-create.component.scss']
+  styleUrls: ['./electoral-district-create.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ]
 })
 export class ElectoralDistrictCreateComponent implements OnInit {
   form!: FormGroup;
@@ -24,6 +33,7 @@ export class ElectoralDistrictCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
+      id: [null],
       name: ['', Validators.required],
       code: ['', Validators.required],
       description: ['']
@@ -48,9 +58,7 @@ export class ElectoralDistrictCreateComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) return;
 
     this.districtService.create(this.form.value).subscribe(() => {
       this.router.navigate(['/electoral-districts']);

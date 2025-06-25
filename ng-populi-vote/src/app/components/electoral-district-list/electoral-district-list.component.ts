@@ -2,17 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ElectoralDistrictService } from '../../service/electoral-district.service';
 import { ElectoralDistrict } from '../../interface/electoral-district.interface';
-import { RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'electoral-district-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule
+  ],
   templateUrl: './electoral-district-list.component.html',
   styleUrls: ['./electoral-district-list.component.scss']
 })
 export class ElectoralDistrictListComponent implements OnInit {
   districts: ElectoralDistrict[] = [];
+  displayedColumns: string[] = ['name', 'code', 'description', 'actions'];
 
   constructor(private districtService: ElectoralDistrictService) {}
 

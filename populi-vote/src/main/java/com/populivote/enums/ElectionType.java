@@ -8,8 +8,7 @@ public enum ElectionType {
     PARLIAMENTARY("Parliamentary"),
     MAYORAL("Mayoral"),
     //MUNICIPAL_COUNCIL("Municipal Council"),
-    REFERENDUM_NATIONAL("National Referendum"),
-    REFERENDUM_LOCAL("Local Referendum");
+    REFERENDUM("Referendum");
 
     private final String label;
 

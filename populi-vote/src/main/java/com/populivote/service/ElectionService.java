@@ -10,6 +10,7 @@ import com.populivote.enums.ElectionType;
 import com.populivote.repository.CandidateRepository;
 import com.populivote.repository.ElectionRepository;
 import com.populivote.repository.OptionRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.*;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,15 @@ public class ElectionService {
 
     public List<Election> getElections() {
         return electionRepository.findAllByDeletedOrderByCreatedDateDesc(false);
+    }
+
+    public List<Election> getOngoingElections() {
+        var now = LocalDateTime.now();
+        return electionRepository.findAllByDeletedOrderByCreatedDateDesc(false)
+            .stream()
+            .filter(it -> it.getStartDate().isBefore(now) && it.getEndDate().isAfter(now))
+            .collect(
+                Collectors.toList());
     }
     public List<Option> getOptions(Election election) {
         return optionRepository.findAllByElection(election);

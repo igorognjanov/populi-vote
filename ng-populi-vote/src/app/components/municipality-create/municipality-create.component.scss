@@ -62,3 +62,11 @@
     }
   }
 }
+
+::ng-deep input[disabled],
+::ng-deep textarea[disabled],
+::ng-deep select[disabled] {
+  color: #333 !important; // make text darker
+  background-color: #f9f9f9 !important; // subtle light background
+  border-color: #ccc;
+}

@@ -8,6 +8,7 @@ import com.populivote.enums.ElectionType;
 import com.populivote.common.OptionResponse;
 import com.populivote.domain.Election;
 import com.populivote.dto.ElectionDto;
+import com.populivote.response.OngoingElectionResponse;
 import com.populivote.service.ElectionElectoralDistrictService;
 import com.populivote.service.ElectionMunicipalityService;
 import com.populivote.service.ElectionService;
@@ -34,6 +35,13 @@ public class ElectionMapper {
 
     public List<ElectionDto> getElections() {
         return electionService.getElections()
+            .stream()
+            .map(this::mapElectionToResponse)
+            .collect(Collectors.toList());
+    }
+
+    public List<ElectionDto> getOngoingElections() {
+        return electionService.getOngoingElections()
             .stream()
             .map(this::mapElectionToResponse)
             .collect(Collectors.toList());
@@ -68,6 +76,17 @@ public class ElectionMapper {
         );
     }
 
+    private OngoingElectionResponse mapElectionToOngoingElectionResponse(Election election) {
+        return new OngoingElectionResponse(election.getId(), election.getTitle(), election.getDescription(),
+            election.getStartDate(),
+            election.getEndDate(),
+            election.getType().ordinal(),
+            null,
+            electionMunicipalityService.findMunicipalityIdsByElection(election),
+            electionElectoralDistrictService.findElectoralDistrictIdsByElection(election)
+        );
+    }
+
     private ElectionDto mapElectionToResponseWithOptions(Election election) {
         return new ElectionDto(election.getId(), election.getTitle(), election.getDescription(),
             election.getStartDate(),
@@ -81,7 +100,7 @@ public class ElectionMapper {
     }
 
     private OptionDto mapOptionToOptionDto(Option option) {
-        return new OptionDto(option.getTitle(), mapCandidatesToCandidateDtos(electionService.getCandidates(option)));
+        return new OptionDto(option.getId(), option.getTitle(), mapCandidatesToCandidateDtos(electionService.getCandidates(option)));
     }
 
     private List<CandidateDto> mapCandidatesToCandidateDtos(List<Candidate> candidates) {

@@ -11,6 +11,7 @@ import lombok.Setter;
 public class PollingStationResponse {
     private Long id;
     private String name;
+    private String code;
     private OptionResponse municipality;
     private String address;
 }
