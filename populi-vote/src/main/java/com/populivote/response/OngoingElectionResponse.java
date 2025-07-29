@@ -24,7 +24,7 @@ public class OngoingElectionResponse {
 
     private LocalDateTime endDate;
 
-    private Integer type;
+    private String type;
 
-    private List<Long> electoralDistrictIds;
+    private Boolean hasVoted;
 }

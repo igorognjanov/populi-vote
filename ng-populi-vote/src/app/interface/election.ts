@@ -1,4 +1,5 @@
 import { Option } from './option';
+import { OptionCandidates } from './option-candidates.interface';
 
 export interface Election {
   id: number;
@@ -10,4 +11,7 @@ export interface Election {
   options: Option[];
   electoralDistrictIds: number[];
   municipalityIds: number[];
+  hasVoted: boolean;
+  submitted: boolean;
+  optionCandidates: OptionCandidates[];
 }

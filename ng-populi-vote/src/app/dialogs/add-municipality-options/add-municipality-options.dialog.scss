@@ -1,0 +1,74 @@
+.election-form-container {
+  width: 96%;
+  height: 96%;
+  margin: 2% auto;
+  padding: 2%;
+  background-color: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    color: #336699;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    .option-group {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fff;
+      margin-bottom: 1.5rem;
+
+      .candidate-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+    }
+
+    .button-right {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
+    }
+
+    button[mat-raised-button],
+    button[mat-mini-fab] {
+      margin-top: 0.5rem;
+    }
+
+    button[mat-mini-fab] {
+      align-self: flex-start;
+    }
+
+    .mat-icon {
+      font-size: 20px;
+    }
+  }
+  .action-button-container {
+    display: flex;
+    justify-content: space-around;
+  }
+  .action-button {
+    width: 46%;
+  }
+}
+
+::ng-deep input[disabled],
+::ng-deep textarea[disabled],
+::ng-deep select[disabled] {
+  color: #333 !important; // make text darker
+  background-color: #f9f9f9 !important; // subtle light background
+  border-color: #ccc;
+}

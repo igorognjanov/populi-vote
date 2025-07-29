@@ -10,15 +10,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OptionDto {
-
-    private Long id;
-
-    private String title;
-
+public class OptionCandidates {
     private Long municipalityId;
-
     private Long electoralDistrictId;
-
-    private List<CandidateDto> candidates;
+    private List<OptionDto> options;
 }

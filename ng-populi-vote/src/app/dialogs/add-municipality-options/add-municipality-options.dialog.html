@@ -1,0 +1,112 @@
+<div class='election-form-container'>
+
+  <form [formGroup]='form' (ngSubmit)='onSubmit()'>
+    @if (electionType == ElectionType.MAYORAL) {
+      <mat-form-field>
+        <mat-label>Municipalities</mat-label>
+        <mat-select formControlName='municipalityId' required>
+          <mat-option value='' disabled>Select a municipality</mat-option>
+          <mat-option *ngFor='let municipality of municipalities' [value]='municipality.id'>
+            {{ municipality.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+<!--    <mat-form-field>-->
+<!--      <mat-label>Election Type</mat-label>-->
+<!--      <mat-select formControlName='type' required>-->
+<!--        <mat-option value='' disabled>Select an election type</mat-option>-->
+<!--        <mat-option *ngFor='let type of electionTypes' [value]='type.id'>-->
+<!--          {{ type.label }}-->
+<!--        </mat-option>-->
+<!--      </mat-select>-->
+<!--    </mat-form-field>-->
+    @if (electionType == ElectionType.PARLIAMENTARY) {
+      <mat-form-field>
+        <mat-label>Electoral Districts</mat-label>
+        <mat-select formControlName='electoralDistrictId' required>
+          <mat-option *ngFor='let district of electoralDistricts' [value]='district.id'>
+            {{ district.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+
+    <div formArrayName='options'>
+      <div
+        *ngFor='let option of options.controls; let i = index'
+        [formGroupName]='i'
+        class='option-group'
+      >
+        <mat-form-field>
+          <mat-label>Option Title</mat-label>
+          <input matInput formControlName='title'/>
+        </mat-form-field>
+
+        <div formArrayName='candidates' class='candidate-list'>
+          <div
+            *ngFor='let candidate of candidates(option).controls; let j = index'
+            [formGroupName]='j'
+          >
+            <mat-form-field>
+              <mat-label>Candidate Name</mat-label>
+              <input matInput formControlName='name'/>
+            </mat-form-field>
+
+            @if (canAddAndRemoveCandidates) {
+              <mat-form-field>
+                <mat-label>Position</mat-label>
+                <input matInput type='number' formControlName='position'/>
+              </mat-form-field>
+
+              <div class='button-right'>
+                <button
+                  mat-raised-button
+                  color='warn'
+                  type='button'
+                  (click)='removeCandidate(i, j)'
+                >
+                  ✖ Remove Candidate
+                </button>
+              </div>
+            }
+          </div>
+
+          @if (canAddAndRemoveCandidates) {
+            <button
+              mat-mini-fab
+              color='primary'
+              type='button'
+              (click)='addCandidate(i)'
+              aria-label='Add Candidate'
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          }
+        </div>
+
+        <div class='button-right'>
+          <button
+            mat-raised-button
+            color='warn'
+            type='button'
+            (click)='removeOption(i)'
+          >
+            ✖ Remove Option
+          </button>
+        </div>
+      </div>
+
+      <button
+        mat-raised-button
+        color='primary'
+        type='button'
+        (click)='addOption()'
+      >
+        <mat-icon>add</mat-icon>
+        Add Option
+      </button>
+    </div>
+    <button color='accent' mat-raised-button type='submit' [disabled]='form.invalid'>Submit</button>
+  </form>
+</div>

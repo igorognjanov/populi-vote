@@ -32,4 +32,8 @@ public class ElectionDto {
 
     private List<Long> electoralDistrictIds;
 
+    private Boolean submitted;
+
+    private List<OptionCandidates> optionCandidates;
+
 }

@@ -1,5 +1,6 @@
 package com.populivote.domain;
 
+import com.populivote.enums.ElectionStatus;
 import com.populivote.enums.ElectionType;
 import com.populivote.common.BaseEntity;
 import jakarta.persistence.Column;
@@ -33,19 +34,20 @@ public class Election extends BaseEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private ElectionType type;
 
-    @Column(name = "deleted")
-    private Boolean deleted;
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    private ElectionStatus status;
 
-    public Election(String title, String description, LocalDateTime startDate, LocalDateTime endDate, ElectionType type) {
+    public Election(String title, String description, LocalDateTime startDate, LocalDateTime endDate, ElectionStatus electionStatus, ElectionType type) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.deleted = false;
+        this.status = electionStatus;
         this.type = type;
     }
 }

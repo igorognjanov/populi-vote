@@ -1,7 +1,7 @@
 <div class='election-form-container'>
   <h2>{{ editable ? 'Create Election' : 'Election Details' }}</h2>
 
-  <form [formGroup]='form' (ngSubmit)='onSubmit()'>
+  <form [formGroup]='form'>
     <mat-form-field>
       <mat-label>Title</mat-label>
       <input matInput formControlName='title'/>
@@ -14,8 +14,8 @@
 
     <mat-form-field>
       <mat-label>Start Date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="startDate" />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <input matInput [matDatepicker]='picker' formControlName='startDate'/>
+      <mat-datepicker-toggle matSuffix [for]='picker'></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
@@ -26,8 +26,8 @@
 
     <mat-form-field>
       <mat-label>End Date</mat-label>
-      <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
-      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <input matInput [matDatepicker]='endPicker' formControlName='endDate'/>
+      <mat-datepicker-toggle matSuffix [for]='endPicker'></mat-datepicker-toggle>
       <mat-datepicker #endPicker></mat-datepicker>
     </mat-form-field>
 
@@ -57,103 +57,141 @@
       </mat-form-field>
     }
 
-    @if (showElectoralDistricts) {
-      <mat-form-field>
-        <mat-label>Electoral Districts</mat-label>
-        <mat-select formControlName='electoralDistrictIds' multiple required>
-          <mat-option *ngFor='let district of electoralDistricts' [value]='district.id'>
-            {{ district.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    }
+    @if (electionType === ElectionType.PRESIDENTIAL || electionType === ElectionType.REFERENDUM) {
+      <div formArrayName='options'>
+        <div
+          *ngFor='let option of options.controls; let i = index'
+          [formGroupName]='i'
+          class='option-group'
+        >
+          <mat-form-field>
+            <mat-label>Option Title</mat-label>
+            <input matInput formControlName='title'/>
+          </mat-form-field>
 
-    <div formArrayName='options'>
-      <div
-        *ngFor='let option of options.controls; let i = index'
-        [formGroupName]='i'
-        class='option-group'
-      >
-        <mat-form-field>
-          <mat-label>Option Title</mat-label>
-          <input matInput formControlName='title'/>
-        </mat-form-field>
-
-        <div formArrayName='candidates' class='candidate-list'>
-          <div
-            *ngFor='let candidate of candidates(option).controls; let j = index'
-            [formGroupName]='j'
-          >
-            <mat-form-field >
-              <mat-label>Candidate Name</mat-label>
-              <input matInput formControlName='name'/>
-            </mat-form-field>
-
-            @if (canAddAndRemoveCandidates) {
+          <div formArrayName='candidates' class='candidate-list'>
+            <div
+              *ngFor='let candidate of candidates(option).controls; let j = index'
+              [formGroupName]='j'
+            >
               <mat-form-field>
-                <mat-label>Position</mat-label>
-                <input matInput type='number' formControlName='position'/>
+                <mat-label>Candidate Name</mat-label>
+                <input matInput formControlName='name'/>
               </mat-form-field>
-            }
+
+              @if (canAddAndRemoveCandidates) {
+                <mat-form-field>
+                  <mat-label>Position</mat-label>
+                  <input matInput type='number' formControlName='position'/>
+                </mat-form-field>
+              }
+
+              @if (editable && canAddAndRemoveCandidates) {
+                <div class='button-right'>
+                  <button
+                    mat-raised-button
+                    color='warn'
+                    type='button'
+                    (click)='removeCandidate(i, j)'
+                  >
+                    ✖ Remove Candidate
+                  </button>
+                </div>
+              }
+            </div>
 
             @if (editable && canAddAndRemoveCandidates) {
-              <div class='button-right'>
-                <button
-                  mat-raised-button
-                  color='warn'
-                  type='button'
-                  (click)='removeCandidate(i, j)'
-                >
-                  ✖ Remove Candidate
-                </button>
-              </div>
+              <button
+                mat-mini-fab
+                color='primary'
+                type='button'
+                (click)='addCandidate(i)'
+                aria-label='Add Candidate'
+              >
+                <mat-icon>add</mat-icon>
+              </button>
             }
           </div>
 
-          @if (editable && canAddAndRemoveCandidates) {
-            <button
-              mat-mini-fab
-              color='primary'
-              type='button'
-              (click)='addCandidate(i)'
-              aria-label='Add Candidate'
-            >
-              <mat-icon>add</mat-icon>
+          @if (editable) {
+            <div class='button-right'>
+              <button
+                mat-raised-button
+                color='warn'
+                type='button'
+                (click)='removeOption(i)'
+              >
+                ✖ Remove Option
+              </button>
+            </div>
+          }
+        </div>
+
+        @if (editable && canAddOption) {
+          <button
+            mat-raised-button
+            color='primary'
+            type='button'
+            (click)='addOption()'
+          >
+            <mat-icon>add</mat-icon>
+            Add Option
+          </button>
+        }
+      </div>
+    }
+
+    <div class='option-candidates-list' *ngIf='optionCandidates.length > 0'>
+      <h3>Options</h3>
+
+      <div *ngFor='let oc of optionCandidates; let i = index' class='option-candidate-block'>
+        <div class='option-candidate-header'>
+          <span *ngIf='oc.municipalityId'>Municipality: {{ findMunicipality(oc.municipalityId)?.label }}</span>
+          <span
+            *ngIf='oc.electoralDistrictId'>Electoral District: {{ findElectoralDistrict(oc.electoralDistrictId)?.label }}</span>
+          @if (editable) {
+            <button mat-icon-button color='warn' (click)='removeOptionCandidate(i)' aria-label='Remove entry'>
+              <mat-icon>delete</mat-icon>
             </button>
           }
         </div>
 
-        @if (editable) {
-          <div class='button-right'>
-            <button
-              mat-raised-button
-              color='warn'
-              type='button'
-              (click)='removeOption(i)'
-            >
-              ✖ Remove Option
-            </button>
-          </div>
-        }
+        <div class='option-candidate-options'>
+          @for (option of oc.options; track option) {
+            <div class='option-display'>
+              <div class='option-title'>
+                <mat-icon>how_to_vote</mat-icon>
+                <h3><b>{{ option.title }}</b></h3>
+              </div>
+              @if (option.candidates && option.candidates.length == 1) {
+                <span> - {{ option.candidates[0].name }}</span>
+              } @else if (option.candidates && option.candidates.length > 1) {
+                @for (candidate of option.candidates.sort(); track candidate) {
+                  <div style='margin: 5px'><b>{{ candidate.position }}</b>. {{ candidate.name }}</div>
+                }
+              }
+            </div>
+          }
+        </div>
       </div>
-
-      @if (editable && canAddOption) {
-        <button
-          mat-raised-button
-          color='primary'
-          type='button'
-          (click)='addOption()'
-        >
-          <mat-icon>add</mat-icon>
-          Add Option
-        </button>
-      }
     </div>
 
+
+    @if (editable && (electionType === ElectionType.PARLIAMENTARY || electionType === ElectionType.MAYORAL)) {
+      <button mat-raised-button (click)='openAddOptionDialog()'>Add</button>
+    }
+
     @if (editable) {
-      <button mat-raised-button color='accent' type='submit' [disabled]='form.invalid'>
-        Create
-      </button>
+      <div class='action-button-container'>
+        <button mat-raised-button color='accent' type='submit' class='action-button' (click)='onSubmit(true)'
+                [disabled]='form.invalid'>
+          Submit
+        </button>
+        <button mat-raised-button type='submit' class='action-button' [disabled]='form.invalid'
+                (click)='onSubmit(false)'>
+          Save progress
+        </button>
+      </div>
     }
   </form>
 </div>

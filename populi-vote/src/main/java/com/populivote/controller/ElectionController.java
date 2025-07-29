@@ -3,6 +3,7 @@ package com.populivote.controller;
 import com.populivote.common.OptionResponse;
 import com.populivote.dto.ElectionDto;
 import com.populivote.mapper.ElectionMapper;
+import com.populivote.response.OngoingElectionResponse;
 import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,8 +30,8 @@ public class ElectionController {
     }
 
     @GetMapping("/ongoing")
-    public List<ElectionDto> getOngoingElections() {
-        return electionMapper.getOngoingElections();
+    public List<OngoingElectionResponse> getOngoingElections(Authentication connectedUser) {
+        return electionMapper.getOngoingElections(connectedUser);
     }
 
     @GetMapping("/{id}")

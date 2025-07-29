@@ -6,6 +6,7 @@ import com.populivote.domain.ElectionElectoralDistrict;
 import com.populivote.domain.ElectionMunicipality;
 import com.populivote.domain.Option;
 import com.populivote.dto.ElectionDto;
+import com.populivote.enums.ElectionStatus;
 import com.populivote.enums.ElectionType;
 import com.populivote.repository.CandidateRepository;
 import com.populivote.repository.ElectionRepository;
@@ -41,22 +42,21 @@ public class ElectionService {
         this.electionElectoralDistrictService = electionElectoralDistrictService;
     }
 
-    //TODO: Add logs
-
     public List<Election> getElections() {
-        return electionRepository.findAllByDeletedOrderByCreatedDateDesc(false);
+        return electionRepository.findAllByStatusOrderByCreatedDateDesc(ElectionStatus.SUBMITTED);
     }
 
     public List<Election> getOngoingElections() {
         var now = LocalDateTime.now();
-        return electionRepository.findAllByDeletedOrderByCreatedDateDesc(false)
+        return getElections()
             .stream()
             .filter(it -> it.getStartDate().isBefore(now) && it.getEndDate().isAfter(now))
             .collect(
                 Collectors.toList());
     }
+
     public List<Option> getOptions(Election election) {
-        return optionRepository.findAllByElection(election);
+        return optionRepository.findAllByElectionId(election.getId());
     }
 
     public List<Candidate> getCandidates(Option option) {
@@ -69,29 +69,72 @@ public class ElectionService {
 
     public void softDelete(Long id) {
         var election = findById(id);
-        election.setDeleted(true);
+        election.setStatus(ElectionStatus.DELETED);
         electionRepository.save(election);
     }
 
     public Election createOrUpdate(ElectionDto request) {
+        ElectionStatus status;
+        if (request.getSubmitted()) {
+            status = ElectionStatus.SUBMITTED;
+        } else {
+            status = ElectionStatus.DRAFT;
+        }
         if (request.getId() == null) {
             var election = electionRepository.save(new Election(
                 request.getDescription(),
                 request.getTitle(),
                 request.getStartDate(),
                 request.getEndDate(),
+                status,
                 ElectionType.values()[request.getType()]
             ));
 
             request.getOptions().forEach(optionDto -> {
-                var option = optionRepository.save(new Option(optionDto.getTitle(), election));
+                var option = optionRepository.save(new Option(optionDto.getTitle(), null, null, election));
 
                 candidateRepository.saveAll(optionDto.getCandidates()
                     .stream()
                     .map(candidateDto -> new Candidate(candidateDto.getName(), candidateDto.getPosition(), option,
+                        // option
                         false))
                     .collect(Collectors.toList()));
             });
+
+            if (request.getOptionCandidates() != null) {
+                request.getOptionCandidates().forEach(optionDto -> {
+                    ElectionElectoralDistrict electionElectoralDistrict;
+                    ElectionMunicipality electionMunicipality;
+                    if (optionDto.getElectoralDistrictId() != null) {
+                        electionElectoralDistrict = electionElectoralDistrictService.save(
+                            new ElectionElectoralDistrict(election,
+                                electoralDistrictService.findById(optionDto.getElectoralDistrictId())));
+                    } else {
+                        electionElectoralDistrict = null;
+                    }
+                    if (optionDto.getMunicipalityId() != null) {
+                        electionMunicipality = electionMunicipalityService.save(new ElectionMunicipality(election,
+                            municipalityService.findById(optionDto.getMunicipalityId())));
+                    } else {
+                        electionMunicipality = null;
+                    }
+
+                    optionDto.getOptions().forEach(option -> {
+                        var newOption = optionRepository.save(
+                            new Option(option.getTitle(), electionElectoralDistrict, electionMunicipality,
+                                election));
+
+                        candidateRepository.saveAll(option.getCandidates()
+                            .stream()
+                            .map(
+                                candidateDto -> new Candidate(candidateDto.getName(), candidateDto.getPosition(),
+                                    newOption,
+                                    // option
+                                    false))
+                            .collect(Collectors.toList()));
+                    });
+                });
+            }
 
             this.electionMunicipalityService.saveAll(request.getMunicipalityIds()
                 .stream()
@@ -104,7 +147,6 @@ public class ElectionService {
                     Collectors.toList()));
 
             return election;
-
         } else {
             var election = findById(request.getId());
             election.setTitle(request.getTitle());

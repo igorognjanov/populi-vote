@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Election } from '../interface/election';
 import { OptionResponse } from '../interface/option-response.interface';
+import { OngoingElection } from '../interface/ongoing-election.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ElectionService {
@@ -17,8 +18,8 @@ export class ElectionService {
     return this.httpClient.get<Election[]>(this.path);
   }
 
-  getOngoingElections(): Observable<Election[]> {
-    return this.httpClient.get<Election[]>(`${this.path}/ongoing`);
+  getOngoingElections(): Observable<OngoingElection[]> {
+    return this.httpClient.get<OngoingElection[]>(`${this.path}/ongoing`);
   }
 
   findById(id: number): Observable<Election> {

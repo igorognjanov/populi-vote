@@ -23,6 +23,14 @@ public final class Option extends BaseEntity {
     private String title;
 
     @ManyToOne
+    @JoinColumn(name = "election_electoral_dsitrict_id")
+    private ElectionElectoralDistrict electionElectoralDistrict;
+
+    @ManyToOne
+    @JoinColumn(name = "election_municipality_id")
+    private ElectionMunicipality electionMunicipality;
+
+    @ManyToOne
     @JoinColumn(name = "election_id")
     private Election election;
 }

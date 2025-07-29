@@ -25,4 +25,8 @@ public class ElectionMunicipalityService {
     public List<ElectionMunicipality> saveAll(List<ElectionMunicipality> electionMunicipalities) {
         return this.electionMunicipalityRepository.saveAll(electionMunicipalities);
     }
+
+    public ElectionMunicipality save(ElectionMunicipality electionMunicipalities) {
+        return this.electionMunicipalityRepository.save(electionMunicipalities);
+    }
 }

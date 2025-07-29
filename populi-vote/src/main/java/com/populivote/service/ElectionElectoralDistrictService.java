@@ -27,4 +27,8 @@ public class ElectionElectoralDistrictService {
     public List<ElectionElectoralDistrict> saveAll(List<ElectionElectoralDistrict> electionElectoralDistricts) {
         return this.electionElectoralDistrictRepository.saveAll(electionElectoralDistricts);
     }
+
+    public ElectionElectoralDistrict save(ElectionElectoralDistrict electionElectoralDistricts) {
+        return this.electionElectoralDistrictRepository.save(electionElectoralDistricts);
+    }
 }

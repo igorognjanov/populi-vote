@@ -1,13 +1,16 @@
-<div class="home-container">
+<div class='home-container'>
   <h1>Welcome to Populi Vote</h1>
   <p>Your secure platform for fair and transparent online voting.</p>
 
-  <section class="ongoing-elections" *ngIf="ongoingElections.length > 0">
+  <section class='ongoing-elections' *ngIf='ongoingElections.length > 0'>
     <h2>Ongoing Elections</h2>
-    <div class="election-cards">
-      <mat-card *ngFor="let election of ongoingElections" class="election-card">
+    <div class='election-cards'>
+      <mat-card *ngFor='let election of ongoingElections' class='election-card'>
         <mat-card-header>
           <mat-card-title>{{ election.title }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ election.type }}
+          </mat-card-subtitle>
           <mat-card-subtitle>
             {{ election.startDate | date:'mediumDate' }} - {{ election.endDate | date:'mediumDate' }}
           </mat-card-subtitle>
@@ -16,15 +19,17 @@
           <p>{{ election.description }}</p>
         </mat-card-content>
         <mat-card-actions>
-
-          <button mat-raised-button (click)="goToVote(election.id)">Cast Your Vote</button>
-          <button mat-raised-button (click)="goToVote(election.id)">Cast Your Vote</button>
+          @if (election.hasVoted) {
+            <button mat-raised-button (click)='goToStats(election.id)'>Stats</button>
+          } @else {
+            <button mat-raised-button (click)='goToVote(election.id)'>Cast Your Vote</button>
+          }
         </mat-card-actions>
       </mat-card>
     </div>
   </section>
 
-  <section *ngIf="ongoingElections.length === 0" class="no-elections">
+  <section *ngIf='ongoingElections.length === 0' class='no-elections'>
     <p>No ongoing elections at the moment. Please check back later.</p>
   </section>
 </div>

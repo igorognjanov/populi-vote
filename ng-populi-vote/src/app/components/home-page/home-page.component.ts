@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { VoteService } from '../../service/vote.service';
+import { OngoingElection } from '../../interface/ongoing-election.interface';
 
 @Component({
   selector: 'home-page',
@@ -14,7 +15,7 @@ import { VoteService } from '../../service/vote.service';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent implements OnInit {
-  ongoingElections: any = [];
+  ongoingElections: OngoingElection[] = [];
 
   constructor(private router: Router,
               private electionService: ElectionService,
@@ -33,5 +34,9 @@ export class HomePageComponent implements OnInit {
 
   goToVote(electionId: number) {
     this.router.navigate([`/vote/${electionId}`]);
+  }
+
+  goToStats(electionId: number) {
+    this.router.navigate([`/stats/${electionId}`]);
   }
 }
