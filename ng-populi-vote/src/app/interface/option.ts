@@ -6,4 +6,5 @@ export interface Option {
   municipalityId: number;
   electoralDistrictId: number;
   candidates: Candidate[];
+  numberOfPhysicalVotes: number;
 }

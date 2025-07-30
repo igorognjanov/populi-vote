@@ -39,6 +39,11 @@ public class ElectionController {
         return electionMapper.findById(id);
     }
 
+    @GetMapping("/vote/{id}")
+    public ElectionDto findByIdForVote(@PathVariable Long id) {
+        return electionMapper.findByIdForVote(id);
+    }
+
     @PutMapping
     public ElectionDto createOrEdit(@RequestBody ElectionDto electionRequest, Authentication connectedUser
     ) {

@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { VoteService } from '../../service/vote.service';
 import { OngoingElection } from '../../interface/ongoing-election.interface';
+import { KeycloakService } from '../../service/keycloak.service';
 
 @Component({
   selector: 'home-page',
@@ -16,11 +16,14 @@ import { OngoingElection } from '../../interface/ongoing-election.interface';
 })
 export class HomePageComponent implements OnInit {
   ongoingElections: OngoingElection[] = [];
+  keycloakService: KeycloakService
 
   constructor(private router: Router,
               private electionService: ElectionService,
-              private voteService: VoteService
-  ) {}
+              keycloakService: KeycloakService
+  ) {
+    this.keycloakService = keycloakService;
+  }
 
   ngOnInit(): void {
     this.electionService.getOngoingElections().subscribe({
@@ -38,5 +41,9 @@ export class HomePageComponent implements OnInit {
 
   goToStats(electionId: number) {
     this.router.navigate([`/stats/${electionId}`]);
+  }
+
+  goToManualVoteAddingScreen(electionId: number) {
+    this.router.navigate([`/physical-votes/${electionId}`]);
   }
 }

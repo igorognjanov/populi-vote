@@ -33,4 +33,7 @@ public final class Option extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "election_id")
     private Election election;
+
+    @Column(name = "number_of_physical_votes")
+    private Long numberOfPhysicalVotes;
 }

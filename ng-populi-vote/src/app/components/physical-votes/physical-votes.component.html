@@ -1,0 +1,44 @@
+<form [formGroup]='form' (ngSubmit)='onSubmit()'>
+  <div class='options-container'>
+    <div class='option-candidates-list' *ngIf='optionCandidates.length > 0'>
+      <h3>Options</h3>
+
+      <div *ngFor='let oc of optionCandidates; let i = index' class='option-candidate-block'>
+        <div class='option-candidate-header'>
+          <span *ngIf='oc.municipalityId'>Municipality: {{ findMunicipality(oc.municipalityId)?.label }}</span>
+          <span
+            *ngIf='oc.electoralDistrictId'>Electoral District: {{ findElectoralDistrict(oc.electoralDistrictId)?.label }}</span>
+        </div>
+
+        <div class='option-candidate-options'>
+          @for (option of oc.options; track option) {
+            <div class='option-display'>
+              <div class='space-between'>
+                <div class='option-title'>
+                  <mat-icon>how_to_vote</mat-icon>
+                  <h3><b>{{ option.title }}</b></h3>
+                </div>
+                @if (form.get(option.id.toString())) {
+                  <div>
+                    <mat-form-field>
+                      <mat-label>Number of physical votes</mat-label>
+                      <input matInput type='number' [formControlName]='option.id'/>
+                    </mat-form-field>
+                  </div>
+                }
+              </div>
+              @if (option.candidates && option.candidates.length == 1) {
+                <span> - {{ option.candidates[0].name }}</span>
+              } @else if (option.candidates && option.candidates.length > 1) {
+                @for (candidate of option.candidates.sort(); track candidate) {
+                  <div style='margin: 5px'><b>{{ candidate.position }}</b>. {{ candidate.name }}</div>
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <button mat-raised-button color='accent' type='submit' class='action-button'>Submit</button>
+    </div>
+  </div>
+</form>

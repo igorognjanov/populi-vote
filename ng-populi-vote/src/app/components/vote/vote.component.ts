@@ -36,7 +36,7 @@ export class VotingComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const id = params['id'];
-      this.electionService.findById(id).subscribe(election => this.election = election);
+      this.electionService.findByIdForVote(id).subscribe(election => this.election = election);
       this.voteService.hasUserVotedOnElection(id).subscribe(hasVoted => this.submitted = hasVoted);
     });
     this.votingForm = this.fb.group({

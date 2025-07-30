@@ -24,6 +24,9 @@
           } @else {
             <button mat-raised-button (click)='goToVote(election.id)'>Cast Your Vote</button>
           }
+          @if (keycloakService.hasAdminRealmRole()) {
+            <button mat-raised-button (click)='goToManualVoteAddingScreen(election.id)'>Physical Votes</button>
+          }
         </mat-card-actions>
       </mat-card>
     </div>

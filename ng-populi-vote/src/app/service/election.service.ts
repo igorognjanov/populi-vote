@@ -26,6 +26,10 @@ export class ElectionService {
     return this.httpClient.get<Election>(`${this.path}/${id}`);
   }
 
+  findByIdForVote(id: number): Observable<Election> {
+    return this.httpClient.get<Election>(`${this.path}/vote/${id}`);
+  }
+
   createOrUpdate(request: Election): Observable<Election> {
     return this.httpClient.put<Election>(`${this.path}`, request);
   }

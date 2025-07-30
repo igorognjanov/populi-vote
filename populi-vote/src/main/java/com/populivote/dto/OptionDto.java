@@ -21,4 +21,6 @@ public class OptionDto {
     private Long electoralDistrictId;
 
     private List<CandidateDto> candidates;
+
+    private Long numberOfPhysicalVotes;
 }

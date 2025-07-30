@@ -6,4 +6,5 @@ export interface OngoingElection {
   endDate: Date;
   type: string;
   hasVoted: boolean;
+  question: string;
 }

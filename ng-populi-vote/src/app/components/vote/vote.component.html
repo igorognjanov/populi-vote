@@ -4,7 +4,11 @@
       <h2>🗳️ Vote Now</h2>
 
       <mat-radio-group formControlName='selectedOption' class='options'>
-        <mat-label>Select your choice</mat-label>
+        @if (election?.question) {
+          <mat-label>{{election?.question}}</mat-label>
+        } @else {
+          <mat-label>Select your choice</mat-label>
+        }
 
         @for (option of election?.options; track option) {
           <mat-radio-button [value]='option.id'>

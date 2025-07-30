@@ -42,12 +42,16 @@ public class Election extends BaseEntity {
     @Enumerated(EnumType.ORDINAL)
     private ElectionStatus status;
 
-    public Election(String title, String description, LocalDateTime startDate, LocalDateTime endDate, ElectionStatus electionStatus, ElectionType type) {
+    @Column(name = "question")
+    private String question;
+
+    public Election(String title, String description, LocalDateTime startDate, LocalDateTime endDate, ElectionStatus electionStatus, ElectionType type, String question) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = electionStatus;
         this.type = type;
+        this.question = question;
     }
 }

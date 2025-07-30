@@ -1,6 +1,5 @@
 package com.populivote.dto;
 
-import com.populivote.enums.ElectionType;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -35,5 +34,7 @@ public class ElectionDto {
     private Boolean submitted;
 
     private List<OptionCandidates> optionCandidates;
+
+    private String question;
 
 }

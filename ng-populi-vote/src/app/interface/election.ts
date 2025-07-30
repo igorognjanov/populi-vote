@@ -14,4 +14,5 @@ export interface Election {
   hasVoted: boolean;
   submitted: boolean;
   optionCandidates: OptionCandidates[];
+  question: string;
 }

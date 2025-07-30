@@ -13,6 +13,7 @@ import com.populivote.response.OngoingElectionResponse;
 import com.populivote.service.ElectionElectoralDistrictService;
 import com.populivote.service.ElectionMunicipalityService;
 import com.populivote.service.ElectionService;
+import com.populivote.service.OptionService;
 import com.populivote.service.VoteService;
 import java.util.Arrays;
 import java.util.List;
@@ -27,15 +28,18 @@ public class ElectionMapper {
     private final ElectionMunicipalityService electionMunicipalityService;
     private final ElectionElectoralDistrictService electionElectoralDistrictService;
     private final VoteService voteService;
+    private final OptionService optionService;
 
     public ElectionMapper(ElectionService electionService,
                           ElectionMunicipalityService electionMunicipalityService,
                           ElectionElectoralDistrictService electionElectoralDistrictService,
-                          VoteService voteService) {
+                          VoteService voteService,
+                          OptionService optionService) {
         this.electionService = electionService;
         this.electionMunicipalityService = electionMunicipalityService;
         this.electionElectoralDistrictService = electionElectoralDistrictService;
         this.voteService = voteService;
+        this.optionService = optionService;
     }
 
     public List<ElectionDto> getElections() {
@@ -53,11 +57,15 @@ public class ElectionMapper {
     }
 
     public ElectionDto findById(Long id) {
-        return mapElectionToResponseWithOptions(electionService.findById(id));
+        return mapElectionToResponseWithOptions(electionService.findById(id), false);
+    }
+
+    public ElectionDto findByIdForVote(Long id) {
+        return mapElectionToResponseWithOptions(electionService.findById(id), true);
     }
 
     public ElectionDto createOrUpdate(ElectionDto request, Authentication connectedUser) {
-        return mapElectionToResponseWithOptions(electionService.createOrUpdate(request));
+        return mapElectionToResponseWithOptions(electionService.createOrUpdate(request), false);
     }
 
     public void softDelete(Long id) {
@@ -79,7 +87,8 @@ public class ElectionMapper {
             electionMunicipalityService.findMunicipalityIdsByElection(election),
             electionElectoralDistrictService.findElectoralDistrictIdsByElection(election),
             election.getStatus() == ElectionStatus.SUBMITTED,
-            null
+            null,
+            election.getQuestion()
         );
     }
 
@@ -93,17 +102,18 @@ public class ElectionMapper {
         );
     }
 
-    private ElectionDto mapElectionToResponseWithOptions(Election election) {
+    private ElectionDto mapElectionToResponseWithOptions(Election election, Boolean optionsForActiveUser) {
         return new ElectionDto(election.getId(), election.getTitle(), election.getDescription(),
             election.getStartDate(),
             election.getEndDate(),
             election.getType().ordinal(),
-            electionService.getOptions(election)
+            optionService.getOptionsByElectionId(election, optionsForActiveUser)
                 .stream().map(this::mapOptionToOptionDto).collect(Collectors.toList()),
             electionMunicipalityService.findMunicipalityIdsByElection(election),
             electionElectoralDistrictService.findElectoralDistrictIdsByElection(election),
             election.getStatus() == ElectionStatus.SUBMITTED,
-            null
+            null,
+            election.getQuestion()
         );
     }
 
@@ -111,15 +121,16 @@ public class ElectionMapper {
         Long municipalityId = null;
         Long electoralDistrictId = null;
         if (option.getElectionMunicipality() != null) {
-            municipalityId = option.getElectionMunicipality().getId();
+            municipalityId = option.getElectionMunicipality().getMunicipality().getId();
         }
-         if (option.getElectionElectoralDistrict() != null) {
-             electoralDistrictId = option.getElectionElectoralDistrict().getId();
+        if (option.getElectionElectoralDistrict() != null) {
+            electoralDistrictId = option.getElectionElectoralDistrict().getElectoralDistrict().getId();
         }
 
         return new OptionDto(option.getId(), option.getTitle(), municipalityId,
             electoralDistrictId,
-            mapCandidatesToCandidateDtos(electionService.getCandidates(option)));
+            mapCandidatesToCandidateDtos(electionService.getCandidates(option)),
+            option.getNumberOfPhysicalVotes());
     }
 
     private List<CandidateDto> mapCandidatesToCandidateDtos(List<Candidate> candidates) {

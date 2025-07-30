@@ -1,0 +1,73 @@
+.options-container {
+  display: flex;
+  justify-content: center;
+}
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+.option-candidates-list {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  width: 50%;
+
+  h3 {
+    color: #444;
+    margin-bottom: 1rem;
+  }
+
+  .option-candidate-block {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    margin-bottom: 1.5rem;
+
+    .option-candidate-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+
+      span {
+        font-size: 1rem;
+        color: #555;
+      }
+
+      button {
+        margin-left: 1rem;
+      }
+    }
+
+    .option-candidate-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .option-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 10px;
+      }
+
+      .option-display {
+        padding: 0.5rem;
+        border-radius: 4px;
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+
+        mat-icon {
+          font-size: 20px;
+          color: #336699;
+        }
+
+        span {
+          font-size: 14px;
+          color: #333;
+        }
+      }
+    }
+  }
+}

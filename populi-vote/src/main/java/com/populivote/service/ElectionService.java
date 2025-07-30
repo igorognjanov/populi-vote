@@ -55,10 +55,6 @@ public class ElectionService {
                 Collectors.toList());
     }
 
-    public List<Option> getOptions(Election election) {
-        return optionRepository.findAllByElectionId(election.getId());
-    }
-
     public List<Candidate> getCandidates(Option option) {
         return candidateRepository.findAllByOption(option);
     }
@@ -82,16 +78,17 @@ public class ElectionService {
         }
         if (request.getId() == null) {
             var election = electionRepository.save(new Election(
-                request.getDescription(),
                 request.getTitle(),
+                request.getDescription(),
                 request.getStartDate(),
                 request.getEndDate(),
                 status,
-                ElectionType.values()[request.getType()]
+                ElectionType.values()[request.getType()],
+                request.getQuestion()
             ));
 
             request.getOptions().forEach(optionDto -> {
-                var option = optionRepository.save(new Option(optionDto.getTitle(), null, null, election));
+                var option = optionRepository.save(new Option(optionDto.getTitle(), null, null, election, 0L));
 
                 candidateRepository.saveAll(optionDto.getCandidates()
                     .stream()
@@ -122,7 +119,7 @@ public class ElectionService {
                     optionDto.getOptions().forEach(option -> {
                         var newOption = optionRepository.save(
                             new Option(option.getTitle(), electionElectoralDistrict, electionMunicipality,
-                                election));
+                                election, 0L));
 
                         candidateRepository.saveAll(option.getCandidates()
                             .stream()

@@ -22,7 +22,7 @@ import { AddMunicipalityOptionsDialog } from '../../dialogs/add-municipality-opt
 import { Election } from '../../interface/election';
 import { OptionCandidates } from '../../interface/option-candidates.interface';
 import { ElectoralDistrictService } from '../../service/electoral-district.service';
-import { Option } from '../../interface/option';
+import { OptionHelperService } from '../../helper/option-helper.service';
 
 @Component({
   selector: 'election-create-edit',
@@ -56,7 +56,8 @@ export class ElectionCreateComponent implements OnInit {
     private router: Router,
     private municipalityService: MunicipalityService,
     private electoralDistrictService: ElectoralDistrictService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private optionHelper: OptionHelperService
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +72,8 @@ export class ElectionCreateComponent implements OnInit {
       type: [null, Validators.required],
       options: this.formBuilder.array([]),
       municipalityIds: [[]],
-      electoralDistrictIds: [[]]
+      electoralDistrictIds: [[]],
+      question: [null]
     });
 
     this.electionService.getElectionTypes().subscribe(electionTypes => this.electionTypes = electionTypes);
@@ -99,9 +101,10 @@ export class ElectionCreateComponent implements OnInit {
             endTime: election.endDate.toString().split('T')[1],
             type: election.type,
             electoralDistrictIds: election.electoralDistrictIds,
-            municipalityIds: election.municipalityIds
+            municipalityIds: election.municipalityIds,
+            question: election.question
           });
-          this.optionCandidates = this.groupOptionsByLocation(election.options);
+          this.optionCandidates = this.optionHelper.groupOptionsByLocation(election.options);
           const optionsArray = this.form.get('options') as FormArray;
 
           election.options.forEach(option => {
@@ -162,6 +165,9 @@ export class ElectionCreateComponent implements OnInit {
           if (this.editable) {
             this.addOption();
           }
+          const questionControl = this.form.get('question');
+          questionControl?.setValidators([Validators.required]);
+          questionControl?.updateValueAndValidity();
           break;
         }
         case ElectionType.PRESIDENTIAL: {
@@ -201,34 +207,6 @@ export class ElectionCreateComponent implements OnInit {
     // this.form.valueChanges.subscribe(form => {
     //   this.logInvalidControls(this.form);
     // })
-  }
-
-  private groupOptionsByLocation(options: Option[]) {
-    const map = new Map();
-
-    options.forEach(option => {
-      const municipalityId = option.municipalityId || null;
-      const electoralDistrictId = option.electoralDistrictId || null;
-
-      const key = municipalityId ? `M_${municipalityId}` : `E_${electoralDistrictId}`;
-
-      if (!map.has(key)) {
-        map.set(key, {
-          municipalityId: municipalityId,
-          electoralDistrictId: electoralDistrictId,
-          options: [],
-          candidates: option.candidates
-        });
-      }
-
-      map.get(key).options.push({
-        id: option.id,
-        title: option.title,
-        candidates: option.candidates
-      });
-    });
-
-    return Array.from(map.values());
   }
 
   private setCanAddOption(canAddOption: boolean) {
@@ -310,7 +288,7 @@ export class ElectionCreateComponent implements OnInit {
           canAddAndRemoveCandidates: this.canAddAndRemoveCandidates,
           electionType: this.electionType,
           selectedMunicipalityIds: this.optionCandidates.map(it => it.municipalityId).filter(it => !!it),
-          selectedElectoralDistrictIds: this.election?.electoralDistrictIds
+          selectedElectoralDistrictIds: this.optionCandidates.map(it => it.electoralDistrictId).filter(it => !!it)
         },
         width: '900px',
         height: '800px'
@@ -332,16 +310,5 @@ export class ElectionCreateComponent implements OnInit {
     return updatedDate;
   }
 
-  // logInvalidControls(formGroup: FormGroup | FormArray, path: string = ''): void {
-  //   Object.entries(formGroup.controls).forEach(([key, control]) => {
-  //     const currentPath = path ? `${path}.${key}` : key;
-  //
-  //     if (control instanceof FormGroup || control instanceof FormArray) {
-  //       this.logInvalidControls(control, currentPath);
-  //     } else if (control.invalid) {
-  //       console.warn(`Invalid control: ${currentPath}`, control.errors);
-  //     }
-  //   });
-  // }
   protected readonly ElectionType = ElectionType;
 }
