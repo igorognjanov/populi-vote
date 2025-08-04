@@ -5,7 +5,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
 import { ElectionService } from '../../service/election.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Election } from '../../interface/election';
 import { VoteService } from '../../service/vote.service';
 
@@ -21,7 +21,7 @@ import { VoteService } from '../../service/vote.service';
             MatButton,
             MatInput,
             ReactiveFormsModule,
-            MatFormFieldModule]
+            MatFormFieldModule, RouterLink]
 })
 export class VotingComponent implements OnInit {
   votingForm!: FormGroup;
@@ -42,8 +42,6 @@ export class VotingComponent implements OnInit {
     this.votingForm = this.fb.group({
       selectedOption: ['', Validators.required]
     });
-
-    this.votingForm.valueChanges.subscribe(val => console.log(val))
   }
 
   onSubmit(): void {

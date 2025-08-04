@@ -22,6 +22,10 @@ export class ElectionService {
     return this.httpClient.get<OngoingElection[]>(`${this.path}/ongoing`);
   }
 
+  getPastElections(): Observable<OngoingElection[]> {
+    return this.httpClient.get<OngoingElection[]>(`${this.path}/past`);
+  }
+
   findById(id: number): Observable<Election> {
     return this.httpClient.get<Election>(`${this.path}/${id}`);
   }

@@ -25,8 +25,8 @@ public class OptionService {
     }
 
     public List<Option> getOptionsByElectionId(Election election, Boolean optionsForActiveUser) {
-        var pollingStation = pollingStationService.fundByCode(authenticationService.getPollingStationCodeFromToken());
         if (optionsForActiveUser) {
+            var pollingStation = pollingStationService.findByCode(authenticationService.getPollingStationCodeFromToken());
             return optionRepository.findAllByElectionId(election.getId())
                 .stream()
                 .filter(it -> (it.getElectionMunicipality() == null && it.getElectionElectoralDistrict() == null)
@@ -49,25 +49,10 @@ public class OptionService {
         var options = optionRepository.findAllById(optionRequests.stream().map(OptionRequest::getOptionId).collect(
             Collectors.toList()));
 
-        optionRepository.saveAll(options.stream().map(it -> {
-            var copy = copyOption(it);
-            copy.setNumberOfPhysicalVotes(optionRequests.stream()
-                .filter(optionRequest -> Objects.equals(optionRequest.getOptionId(), copy.getId()))
+        optionRepository.saveAll(options.stream().peek(option -> {
+            option.setNumberOfPhysicalVotes(optionRequests.stream()
+                .filter(optionRequest -> Objects.equals(optionRequest.getOptionId(), option.getId()))
                 .findFirst().get().getNumberOfPhysicalVotes());
-            return copy;
         }).collect(Collectors.toList()));
-    }
-
-    private Option copyOption(Option option) {
-        var newOption = new Option(
-            option.getTitle(),
-            option.getElectionElectoralDistrict(),
-            option.getElectionMunicipality(),
-            option.getElection(),
-            option.getNumberOfPhysicalVotes()
-        );
-
-        newOption.setId(option.getId());
-        return newOption;
     }
 }

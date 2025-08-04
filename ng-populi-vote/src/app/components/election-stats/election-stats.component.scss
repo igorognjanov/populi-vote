@@ -1,1 +1,20 @@
+.stats-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+}
 
+.no-data {
+  text-align: center;
+  color: #777;
+  margin-top: 2rem;
+}
+
+.selection-wrapper {
+  width: 40%;
+  margin: 10px;
+}

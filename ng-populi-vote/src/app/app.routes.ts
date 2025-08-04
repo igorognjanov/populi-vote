@@ -13,6 +13,7 @@ import { PollingStationCreateComponent } from './components/polling-station-crea
 import { VotingComponent } from './components/vote/vote.component';
 import { ElectionStatsComponent } from './components/election-stats/election-stats.component';
 import { PhysicalVotesComponent } from './components/physical-votes/physical-votes.component';
+import { PastElectionsComponent } from './components/past-elections/past-elections.component';
 
 export const routes: Routes = [
   {
@@ -39,5 +40,6 @@ export const routes: Routes = [
   { path: 'polling-stations/:id', component: PollingStationCreateComponent },
   { path: 'vote/:id', component: VotingComponent },
   { path: 'stats/:id', component: ElectionStatsComponent },
-  { path: 'physical-votes/:id', component: PhysicalVotesComponent }
+  { path: 'physical-votes/:id', component: PhysicalVotesComponent },
+  { path: 'past-elections', component: PastElectionsComponent }
 ];

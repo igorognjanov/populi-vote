@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Option } from '../interface/option';
+import { OptionCandidates } from '../interface/option-candidates.interface';
 
 @Injectable({ providedIn: 'root' })
 export class OptionHelperService {
 
-  groupOptionsByLocation(options: Option[]) {
+  groupOptionsByLocation(options: Option[]): OptionCandidates[] {
     const map = new Map();
 
     options.forEach(option => {

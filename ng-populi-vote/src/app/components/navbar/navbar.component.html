@@ -1,7 +1,8 @@
 <nav class='navbar'>
-  <div class='logo'>Populi Vote</div>
+  <div class='logo width-100'>Populi Vote</div>
   <ul class='nav-links'>
     <li><a routerLink='/home' routerLinkActive='active'>Home</a></li>
+    <li><a routerLink='/past-elections' routerLinkActive='active'>Past Elections</a></li>
     @if (keycloakService.hasAdminRealmRole()) {
       <li><a routerLink='/elections' routerLinkActive='active'>Elections</a></li>
       <li><a routerLink='/electoral-districts' routerLinkActive='active'>Electoral Districts</a></li>
@@ -9,5 +10,5 @@
       <li><a routerLink='/polling-stations' routerLinkActive='active'>Polling Stations</a></li>
     }
   </ul>
-  <button class='logout' (click)='logout()'>Logout</button>
+  <button class='logout width-100' (click)='logout()'>Logout</button>
 </nav>

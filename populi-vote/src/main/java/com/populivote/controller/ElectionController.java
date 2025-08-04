@@ -34,6 +34,11 @@ public class ElectionController {
         return electionMapper.getOngoingElections(connectedUser);
     }
 
+    @GetMapping("/past")
+    public List<OngoingElectionResponse> getPastElections(Authentication connectedUser) {
+        return electionMapper.getPastElections(connectedUser);
+    }
+
     @GetMapping("/{id}")
     public ElectionDto findById(@PathVariable Long id) {
         return electionMapper.findById(id);

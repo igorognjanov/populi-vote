@@ -36,7 +36,7 @@ public class PollingStationService {
         return pollingStationRepository.findById(id).orElseThrow();
     }
 
-    public PollingStation fundByCode(String code) {
+    public PollingStation findByCode(String code) {
         return pollingStationRepository.findByCode(code);
     }
 

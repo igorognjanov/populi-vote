@@ -1,1 +1,24 @@
-
+<div class='stats-container' *ngIf='chartData'>
+  @if (municipalities.length != 0) {
+    <div class='selection-wrapper'>
+      <mat-select (valueChange)='municipalityChanged($event)' [(value)]='municipalityVal'>
+        <mat-option *ngFor='let type of municipalities' [value]='type.id'>
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+    </div>
+  } @else if (electoralDistricts.length != 0) {
+    <div class='selection-wrapper'>
+    <mat-select (valueChange)='electoralDistrictChanged($event)' [(value)]='electoralDistrictVal'>>
+      <mat-option *ngFor='let type of electoralDistricts' [value]='type.id'>
+        {{ type.label }}
+      </mat-option>
+    </mat-select>
+    </div>
+  }
+  <canvas baseChart
+          [data]='chartData'
+          [options]='chartOptions'
+          [type]="'bar'">
+  </canvas>
+</div>

@@ -52,6 +52,15 @@ public class ElectionMapper {
     public List<OngoingElectionResponse> getOngoingElections(Authentication connectedUser) {
         return electionService.getOngoingElections()
             .stream()
+            .filter(election -> !optionService.getOptionsByElectionId(election, true).isEmpty())
+            .map(election -> mapElectionToOngoingElectionResponse(election, connectedUser))
+            .collect(Collectors.toList());
+    }
+
+    public List<OngoingElectionResponse> getPastElections(Authentication connectedUser) {
+        return electionService.getPastElections()
+            .stream()
+            .filter(election -> !optionService.getOptionsByElectionId(election, true).isEmpty())
             .map(election -> mapElectionToOngoingElectionResponse(election, connectedUser))
             .collect(Collectors.toList());
     }
@@ -117,7 +126,7 @@ public class ElectionMapper {
         );
     }
 
-    private OptionDto mapOptionToOptionDto(Option option) {
+    public OptionDto mapOptionToOptionDto(Option option) {
         Long municipalityId = null;
         Long electoralDistrictId = null;
         if (option.getElectionMunicipality() != null) {

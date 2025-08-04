@@ -135,7 +135,6 @@ export class ElectionCreateComponent implements OnInit {
 
     const startDateControl = this.form.get('startDate');
     const endDateControl = this.form.get('endDate');
-    console.log(this.form.get('startTime'));
     this.form.get('startTime')?.valueChanges.subscribe(time => {
       const startDate = startDateControl?.value;
       if (startDate != null) {
@@ -294,7 +293,6 @@ export class ElectionCreateComponent implements OnInit {
         height: '800px'
       }).afterClosed().subscribe(
       (res) => {
-        console.log('AA', res);
         this.optionCandidates.push(res as OptionCandidates);
       });
   }

@@ -5,7 +5,7 @@
 
       <mat-radio-group formControlName='selectedOption' class='options'>
         @if (election?.question) {
-          <mat-label>{{election?.question}}</mat-label>
+          <mat-label>{{ election?.question }}</mat-label>
         } @else {
           <mat-label>Select your choice</mat-label>
         }
@@ -43,6 +43,17 @@
     <div class='thank-you'>
       <h2>🎉 Thank you!</h2>
       <p>Your vote has been recorded.</p>
+      <div class='actions'>
+        <button
+          mat-raised-button
+          color='primary'
+          type='button' routerLink='/'>Home
+        </button>
+        <button
+          mat-raised-button
+          type='button' [routerLink]='"/stats/" + election?.id'>Stats
+        </button>
+      </div>
     </div>
   }
 </div>

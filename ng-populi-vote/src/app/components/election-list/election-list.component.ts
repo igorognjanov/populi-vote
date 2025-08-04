@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, OnInit } from '@angular/core';
 import { ElectionService } from '../../service/election.service';
 import { Election } from '../../interface/election';
+import { ElectionType } from '../../enum/election-type.enum';
 
 @Component({
   selector: 'election-list',
@@ -24,7 +25,7 @@ import { Election } from '../../interface/election';
 })
 export class ElectionListComponent implements OnInit {
   elections: Election[] = [];
-  displayedColumns: string[] = ['title', 'description', 'startDate', 'endDate', 'actions'];
+  displayedColumns: string[] = ['title', 'description', 'startDate', 'endDate', 'type', 'actions'];
 
   constructor(private electionService: ElectionService) {}
 
@@ -44,4 +45,6 @@ export class ElectionListComponent implements OnInit {
       this.electionService.deleteElection(id).subscribe(() => this.loadElections());
     }
   }
+
+  protected readonly ElectionType = ElectionType;
 }

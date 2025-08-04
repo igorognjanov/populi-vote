@@ -20,12 +20,16 @@
         </mat-card-content>
         <mat-card-actions>
           @if (election.hasVoted) {
-            <button mat-raised-button (click)='goToStats(election.id)'>Stats</button>
+            <button mat-raised-button (click)='goToStats(election.id)'>
+              <mat-icon>bar_chart</mat-icon>
+              Stats</button>
           } @else {
             <button mat-raised-button (click)='goToVote(election.id)'>Cast Your Vote</button>
           }
           @if (keycloakService.hasAdminRealmRole()) {
-            <button mat-raised-button (click)='goToManualVoteAddingScreen(election.id)'>Physical Votes</button>
+            <button style='margin-left: 5px' mat-raised-button (click)='goToManualVoteAddingScreen(election.id)'>
+              <mat-icon>how_to_vote</mat-icon>
+              Physical Votes</button>
           }
         </mat-card-actions>
       </mat-card>

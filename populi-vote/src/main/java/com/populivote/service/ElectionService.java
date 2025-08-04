@@ -55,6 +55,15 @@ public class ElectionService {
                 Collectors.toList());
     }
 
+    public List<Election> getPastElections() {
+        var now = LocalDateTime.now();
+        return getElections()
+            .stream()
+            .filter(it -> it.getEndDate().isBefore(now))
+            .collect(
+                Collectors.toList());
+    }
+
     public List<Candidate> getCandidates(Option option) {
         return candidateRepository.findAllByOption(option);
     }

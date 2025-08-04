@@ -32,7 +32,7 @@ public class VoteMapper {
 
     public Vote create(Long optionId, Authentication user) {
         return voteService.create(optionRepository.findById(optionId).orElseThrow(),
-            pollingStationService.fundByCode(authenticationService.getPollingStationCodeFromToken()), user.getName());
+            pollingStationService.findByCode(authenticationService.getPollingStationCodeFromToken()), user.getName());
     }
 
     public Boolean hasUserVotedOnElection(Authentication user, Long electionId) {

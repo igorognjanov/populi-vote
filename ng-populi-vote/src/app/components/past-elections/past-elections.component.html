@@ -1,0 +1,31 @@
+<div class='home-container'>
+  <section class='ongoing-elections' *ngIf='pastElections.length > 0'>
+    <h2>Past Elections</h2>
+    <div class='election-cards'>
+      <mat-card *ngFor='let election of pastElections' class='election-card'>
+        <mat-card-header>
+          <mat-card-title>{{ election.title }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ election.type }}
+          </mat-card-subtitle>
+          <mat-card-subtitle>
+            {{ election.startDate | date:'mediumDate' }} - {{ election.endDate | date:'mediumDate' }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ election.description }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button (click)='goToStats(election.id)'>Stats</button>
+          @if (keycloakService.hasAdminRealmRole()) {
+            <button mat-raised-button (click)='goToManualVoteAddingScreen(election.id)'>Physical Votes</button>
+          }
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </section>
+
+  <section *ngIf='pastElections.length === 0' class='no-elections'>
+    <p>No past elections at the moment. Please check back later.</p>
+  </section>
+</div>

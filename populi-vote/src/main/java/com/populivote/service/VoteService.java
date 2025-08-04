@@ -24,5 +24,9 @@ public class VoteService {
         return voteRepository.existsByOption_ElectionAndVoter(election, user);
     }
 
+    public Long countVotesForOption(Option option) {
+        return voteRepository.countAllByOption(option);
+    }
+
 
 }

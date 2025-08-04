@@ -8,6 +8,7 @@ import { httpTokenInterceptor } from './interceptor/http-token.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 export function kcFactory(kcService: KeycloakService) {
   return () => kcService.init();
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
               provideHttpClient(
                 withInterceptors([httpTokenInterceptor])
               ),
+              provideCharts(withDefaultRegisterables()),
               provideNativeDateAdapter(), {
       provide: APP_INITIALIZER,
       deps: [KeycloakService],

@@ -6,17 +6,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { OngoingElection } from '../../interface/ongoing-election.interface';
 import { KeycloakService } from '../../service/keycloak.service';
-import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'home-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatCardModule, MatButtonModule, MatIcon],
-  templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.scss']
+  imports: [CommonModule, RouterLink, MatCardModule, MatButtonModule],
+  templateUrl: './past-elections.component.html',
+  styleUrls: ['./past-elections.component.scss']
 })
-export class HomePageComponent implements OnInit {
-  ongoingElections: OngoingElection[] = [];
+export class PastElectionsComponent implements OnInit {
+  pastElections: OngoingElection[] = [];
   keycloakService: KeycloakService
 
   constructor(private router: Router,
@@ -27,9 +26,9 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.electionService.getOngoingElections().subscribe({
+    this.electionService.getPastElections().subscribe({
       next: (elections) => {
-        this.ongoingElections = elections;
+        this.pastElections = elections;
       },
       error: (err) => console.error('Failed to load elections', err)
     });
